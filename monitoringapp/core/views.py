@@ -1,7 +1,9 @@
 from django.shortcuts import render
 
+# core/views.py
+
 def start_page(request):
-    return render(request, 'start_page.html')
+    return render(request, 'start_page.html')  # Путь без 'core/'
 
 def main_page(request):
     return render(request, 'main_page.html')
@@ -17,3 +19,5 @@ def about_us(request):
 
 def test_page(request):
     return render(request, 'test_page.html')
+
+
