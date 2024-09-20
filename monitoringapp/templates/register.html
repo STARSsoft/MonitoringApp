@@ -4,20 +4,41 @@
 
 {% block content %}
     <h1>Регистрация</h1>
+
+    <!-- Отладочная информация -->
+    <p>Форма: {{ form }}</p>  <!-- Отображение объекта формы -->
+    <p>Ошибки формы: {{ form.errors }}</p>  <!-- Отображение ошибок формы -->
+
     <form method="POST">
         {% csrf_token %}
+        {{ form.non_field_errors }}  <!-- Общие ошибки формы -->
+
         <div>
-            <label for="username">Имя пользователя:</label>
-            <input type="text" id="username" name="username" required>
+            {{ form.username.errors }}  <!-- Ошибки поля имени пользователя -->
+            {{ form.username.label_tag }}  <!-- Метка для имени пользователя -->
+            {{ form.username }}  <!-- Поле для имени пользователя -->
         </div>
+
         <div>
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" required>
+            {{ form.email.errors }}  <!-- Ошибки поля email -->
+            {{ form.email.label_tag }}  <!-- Метка для email -->
+            {{ form.email }}  <!-- Поле для email -->
         </div>
+
         <div>
-            <label for="password2">Подтвердите пароль:</label>
-            <input type="password" id="password2" name="password2" required>
+            {{ form.password.errors }}  <!-- Ошибки поля пароля -->
+            {{ form.password.label_tag }}  <!-- Метка для пароля -->
+            {{ form.password }}  <!-- Поле для пароля -->
         </div>
+
+        <div>
+            {{ form.password2.errors }}  <!-- Ошибки поля подтверждения пароля -->
+            {{ form.password2.label_tag }}  <!-- Метка для подтверждения пароля -->
+            {{ form.password2 }}  <!-- Поле для подтверждения пароля -->
+        </div>
+
         <button type="submit">Зарегистрироваться</button>
     </form>
+
+    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
 {% endblock %}

@@ -1,32 +1,38 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from .forms import UserRegistrationForm
 
-# core/views.py
 
-# Функция для запуска главной страницы
+def register_view(request):
+    print("Регистрация: представление вызвано!")  # Текст для проверки
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            new_user.set_password(form.cleaned_data['password'])
+            new_user.save()
+            return redirect('login')
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'register.html', {'form': form})
+
+# Остальные представления
+
 def start_page(request):
     return render(request, 'start_page.html')
 
-# Функция для запуска страницы ввода цен
 def price_add(request):
     return render(request, 'price_add.html')
 
-# Функция для запуска страницы статистики
 def statistics(request):
     return render(request, 'statistics.html')
 
-# Функция для запуска страницы О нас
 def about_us(request):
     return render(request, 'about_us.html')
 
-# Функция запуска страницы авторизации пользователя
 def login_view(request):
     return render(request, 'login.html')
 
-# Функция запуска страницы регистрации пользователя
-def register_view(request):
-    return render(request, 'register.html')
-
-# Функция запуска страницы личного кабинета пользователя
 def profile_view(request):
     return render(request, 'profile.html')
-

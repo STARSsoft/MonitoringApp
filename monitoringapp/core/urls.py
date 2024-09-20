@@ -13,3 +13,5 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),       # Путь для страницы личного кабинета
 ]
 
+
+
