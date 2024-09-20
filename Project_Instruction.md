@@ -217,3 +217,91 @@ def about_us(request):
  
 ```
 Этот код загружает базовый шаблон и внутри файла конкретной страницы теперь можно делать изменения и прописывать логику не нарушая общего дизайна. Данный код одинаковый для всех страниц, за исключением текстового сопровождения каждой страницы.
+27. Для дальнейшей работы с сайтом, а именно взаимодействием с базой данных, нужно создать супер пользователя Джанго. Для этого вводим в терминале команду `python manage.py createsuperuser` и следуем инструкциям.
+28. Поскольку подразумевается, что сайтом будут пользоваться множество людей, то само собой, что необходимы формы регистрации, авторизации пользователя и его личного кабинета. Для начала создаем файл шаблона `login.html` в котором пишем код
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+    <h1>Авторизация</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Войти</button>
+    </form>
+    <p>Еще нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
+{% endblock %}
+
+```
+29. Далее создаем шаблон для страницы регистрации нового пользователя, для этого создаем файл `register.html` и в самом файле прописываем код:
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    <h1>Регистрация</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="password2">Подтвердите пароль:</label>
+            <input type="password" id="password2" name="password2" required>
+        </div>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+{% endblock %}
+
+```
+30. Теперь создаем шаблон для страницы личного кабинета пользователя, который не обладает правами администратора или суперюзера. Для этого создаем файл `profile.html` в котором прописываем код:
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+    <h1>Личный кабинет</h1>
+    <p>Добро пожаловать, {{ user.username }}!</p>
+    <p>Здесь вы можете просматривать свою информацию и изменять настройки профиля.</p>
+    <p><a href="{% url 'logout' %}">Выйти</a></p>
+{% endblock %}
+
+```
+31. Чтобы система увидела новые шаблоны, необходимо дополнить файл `urls.py` строчками кода:
+``` 
+urlpatterns = [
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('profile/', views.profile_view, name='profile'),
+    # Другие маршруты...
+]
+```
+так же следует дополнить файл `views.py` следующим кодом:
+``` 
+def login_view(request):
+    return render(request, 'login.html')
+
+def register_view(request):
+    return render(request, 'register.html')
+
+def profile_view(request):
+    return render(request, 'profile.html')
+```
+ На этом этапе формы еще ничего не могут, это пока только болванки с полями и кнопками. Кроме того форма профиля может выдавать ошибку ругаясь на строку кода `<p><a href="{% url 'logout' %}">Выйти</a></p>`. Чтобы просмотреть профиль, нужно на время просто удалить эту строку.
+ 

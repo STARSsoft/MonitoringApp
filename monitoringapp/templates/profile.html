@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+    <h1>Личный кабинет</h1>
+    <p>Добро пожаловать, {{ user.username }}!</p>
+    <p>Здесь вы можете просматривать свою информацию и изменять настройки профиля.</p>
+    <p><a href="{% url 'logout' %}">Выйти</a></p>
+{% endblock %}
