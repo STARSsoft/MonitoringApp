@@ -149,4 +149,71 @@ def about_us(request):
     return render(request, 'about_us.html')
 
 ```
-25. 
+25. Поскольку все страницы сайта будут иметь единый дизайн, то каждая страница по сути кроме необходимого контента будет иметь один и тот же html код, а это лишний трафик. Поэтому было принято создать базовый шаблон и внутри каждой страницы прописать код, который будет наследовать шаблон дизайна из базового файла. Для этого был создан файл `base.html` в котором прописали следующий код:
+``` 
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мониторинг цен{% endblock %}</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            width: 100%;
+            height: 150px;
+            background-image: url("{% static 'core/images/banner2.jpg' %}");
+            background-size: cover;
+        }
+        .menu {
+            margin-top: 20px;
+        }
+        .menu a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+        }
+        .menu a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <!-- Баннер из картинки banner2.jpg -->
+    </div>
+    <div class="menu">
+        <a href="{% url 'start_page' %}">Главная</a>
+        <a href="{% url 'price_add' %}">Добавить цены</a>
+        <a href="{% url 'statistics' %}">Статистика</a>
+        <a href="{% url 'about_us' %}">О нас</a>
+    </div>
+    
+    <div class="content">
+        {% block content %}
+        <!-- Контент страниц -->
+        {% endblock %}
+    </div>
+</body>
+</html>
+
+```
+Дополнительно в дизайн сайта добавили файл с изображением для баннера.
+26. Для остальных страниц прописал код 
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <h1>Мониторинг цен на продукты питания</h1>
+    <p>Русский | Қазақша | English</p>
+{% endblock %}
+ 
+```
+Этот код загружает базовый шаблон и внутри файла конкретной страницы теперь можно делать изменения и прописывать логику не нарушая общего дизайна. Данный код одинаковый для всех страниц, за исключением текстового сопровождения каждой страницы.
