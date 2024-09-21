@@ -304,4 +304,92 @@ def profile_view(request):
     return render(request, 'profile.html')
 ```
  На этом этапе формы еще ничего не могут, это пока только болванки с полями и кнопками. Кроме того форма профиля может выдавать ошибку ругаясь на строку кода `<p><a href="{% url 'logout' %}">Выйти</a></p>`. Чтобы просмотреть профиль, нужно на время просто удалить эту строку.
+ 32. Теперь нужно реализовть полноценнный функционал по регистрации пользователя. Для этого создадим форму регистрации, используя Django Form API. Форма будет включать поля для имени пользователя, email и пароля.
+Создадим файл `forms.py` в приложении и пропишем следующий код:
+``` 
+from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Подтвердите пароль', widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+    def clean_password2(self):
+        """Проверка совпадения двух паролей."""
+        cd = self.cleaned_data
+        if cd['password'] != cd['password2']:
+            raise ValidationError('Пароли не совпадают.')
+        return cd['password2']
+
+    def clean_email(self):
+        """Проверка уникальности email."""
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('Пользователь с таким email уже существует.')
+        return email
  
+```
+33. Настройка представления для регистрации
+
+В представлении обработаем данные формы, создадим нового пользователя и перенаправим на страницу авторизации после успешной регистрации.
+Обновим `views.py` для обработки регистрации
+``` 
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from .forms import UserRegistrationForm
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            # Создаем нового пользователя, но не сохраняем пароль напрямую
+            new_user = form.save(commit=False)
+            new_user.set_password(form.cleaned_data['password'])
+            new_user.save()
+
+            # Можно автоматически логинить пользователя после регистрации
+            # login(request, new_user)
+
+            # Переадресация на страницу авторизации
+            return redirect('login')
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'register.html', {'form': form})
+
+```
+34. Изменение шаблона register.html
+
+Теперь изменим шаблон register.html, чтобы он использовал форму UserRegistrationForm и отобразил поле для email.
+Обновленный шаблон register.html
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    <h1>Регистрация</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
+{% endblock %}
+
+```
+35. Обновление URL-адресов
+
+Обновить маршрут для страницы регистрации в urls.py.
+``` 
+urlpatterns = [
+    path('register/', views.register_view, name='register'),
+    # Другие маршруты...
+]
+```
