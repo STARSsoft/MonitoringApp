@@ -453,3 +453,103 @@ def login_view(request):
 {% endblock %}
 
 ```
+38. Создадим формы для редактирования профиля и смены пароля
+Форма редактирования профиля
+
+В `forms.py` создадим форму, которая позволит пользователю изменять его личные данные (имя, фамилия, email). Мы будем использовать встроенную модель `User` в Django.
+``` 
+from django import forms
+from django.contrib.auth.models import User
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['email'].required = True  # Email обязательно для заполнения
+```
+39. Обновим представление `profile_view` для обработки обеих форм
+
+Теперь мы создадим представление, которое будет обрабатывать как редактирование профиля, так и смену пароля.
+Необходимо внести изменения в файл `views.py`
+``` 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from .forms import UserProfileForm
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        # Обработка формы профиля
+        profile_form = UserProfileForm(request.POST, instance=request.user)
+        password_form = PasswordChangeForm(request.user, request.POST)
+
+        if 'update_profile' in request.POST and profile_form.is_valid():
+            profile_form.save()
+            return redirect('profile')
+
+        elif 'change_password' in request.POST and password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Чтобы пользователь не был разлогинен после смены пароля
+            return redirect('profile')
+    else:
+        profile_form = UserProfileForm(instance=request.user)
+        password_form = PasswordChangeForm(request.user)
+
+    return render(request, 'profile.html', {
+        'profile_form': profile_form,
+        'password_form': password_form,
+    })
+
+```
+40. Обновление шаблона `profile.html`
+
+Теперь обновим шаблон для отображения форм редактирования профиля и смены пароля.
+Обновлённый `profile.html`:
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+    <h1>Личный кабинет</h1>
+    <p>Добро пожаловать, {{ user.username }}!</p>
+
+    <!-- Форма для редактирования профиля -->
+    <h2>Редактирование профиля</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ profile_form.as_p }}
+        <button type="submit" name="update_profile">Обновить профиль</button>
+    </form>
+
+    <!-- Форма для смены пароля -->
+    <h2>Изменить пароль</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <button type="submit" name="change_password">Изменить пароль</button>
+    </form>
+
+    <p><a href="{% url 'logout' %}">Выйти</a></p>
+{% endblock %}
+```
+41. Настройка URL для выхода из профиля. 
+Пользователю может потребоваться необходимость выйти со своей учетной записи, поэтому нужно дополнительно реализовать функцию выхода с учетной записи.
+Прописываем в файл `urls.py` следующий код:
+``` 
+from django.urls import path
+from . import views
+from django.contrib.auth import views as auth_views
+
+urlpatterns = [
+    path('profile/', views.profile_view, name='profile'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    # Другие маршруты...
+]
+
+```

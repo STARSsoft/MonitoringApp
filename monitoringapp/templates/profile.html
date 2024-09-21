@@ -5,6 +5,22 @@
 {% block content %}
     <h1>Личный кабинет</h1>
     <p>Добро пожаловать, {{ user.username }}!</p>
-    <p>Здесь вы можете просматривать свою информацию и изменять настройки профиля.</p>
+
+    <!-- Форма для редактирования профиля -->
+    <h2>Редактирование профиля</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ profile_form.as_p }}
+        <button type="submit" name="update_profile">Обновить профиль</button>
+    </form>
+
+    <!-- Форма для смены пароля -->
+    <h2>Изменить пароль</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <button type="submit" name="change_password">Изменить пароль</button>
+    </form>
+
     <p><a href="{% url 'logout' %}">Выйти</a></p>
 {% endblock %}

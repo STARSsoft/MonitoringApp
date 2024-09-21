@@ -1,7 +1,12 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from .forms import UserProfileForm
+
 
 
 def register_view(request):
@@ -38,6 +43,32 @@ def login_view(request):
     return render(request, 'login.html')
 
 
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        # Обработка формы профиля
+        profile_form = UserProfileForm(request.POST, instance=request.user)
+        password_form = PasswordChangeForm(request.user, request.POST)
+
+        if 'update_profile' in request.POST and profile_form.is_valid():
+            profile_form.save()
+            return redirect('profile')
+
+        elif 'change_password' in request.POST and password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Чтобы пользователь не был разлогинен после смены пароля
+            return redirect('profile')
+    else:
+        profile_form = UserProfileForm(instance=request.user)
+        password_form = PasswordChangeForm(request.user)
+
+    return render(request, 'profile.html', {
+        'profile_form': profile_form,
+        'password_form': password_form,
+    })
+
+
+
 # Остальные представления
 
 def start_page(request):
@@ -52,5 +83,3 @@ def statistics(request):
 def about_us(request):
     return render(request, 'about_us.html')
 
-def profile_view(request):
-    return render(request, 'profile.html')
