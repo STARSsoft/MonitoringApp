@@ -22,5 +22,11 @@
         <button type="submit" name="change_password">Изменить пароль</button>
     </form>
 
-    <p><a href="{% url 'logout' %}">Выйти</a></p>
+    <!-- Форма для выхода из аккаунта -->
+    <h2>Выйти</h2>
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Выйти</button>
+    </form>
+
 {% endblock %}

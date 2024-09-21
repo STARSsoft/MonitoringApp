@@ -13,3 +13,4 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),       # Путь для страницы личного кабинета
     path('logout/', auth_views.LogoutView.as_view(), name='logout'), # Путь для деавторизации
 ]
+
