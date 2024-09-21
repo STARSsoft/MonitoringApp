@@ -4,6 +4,12 @@
 
 {% block content %}
     <h1>Авторизация</h1>
+
+    <!-- Отображение сообщения об ошибке, если введены неверные данные -->
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
     <form method="POST">
         {% csrf_token %}
         <div>
@@ -16,5 +22,6 @@
         </div>
         <button type="submit">Войти</button>
     </form>
+
     <p>Еще нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
 {% endblock %}

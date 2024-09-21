@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
+from django.contrib.auth import authenticate, login
 
 
 def register_view(request):
@@ -17,6 +18,26 @@ def register_view(request):
 
     return render(request, 'register.html', {'form': form})
 
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        # Проверяем, что пользователь существует и пароль верен
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Авторизуем пользователя и переадресуем на главную страницу
+            login(request, user)
+            return redirect('start_page')  # Переадресация на главную страницу
+        else:
+            # Если неверный логин или пароль
+            return render(request, 'login.html', {'error': 'Неверное имя пользователя или пароль'})
+    return render(request, 'login.html')
+
+
 # Остальные представления
 
 def start_page(request):
@@ -30,9 +51,6 @@ def statistics(request):
 
 def about_us(request):
     return render(request, 'about_us.html')
-
-def login_view(request):
-    return render(request, 'login.html')
 
 def profile_view(request):
     return render(request, 'profile.html')

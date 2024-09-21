@@ -393,3 +393,63 @@ urlpatterns = [
     # Другие маршруты...
 ]
 ```
+36. Теперь нужно реализовать функцию авторизации зарегистрированного пользователя. Начать можно с создания представления для авторизации
+
+Мы будем использовать функцию authenticate и login из Django для обработки авторизации. Функция authenticate проверяет данные пользователя, а login — авторизует его.
+Для этого необходимо обновить файл `views.py`:
+``` 
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        # Проверяем, что пользователь существует и пароль верен
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Авторизуем пользователя и переадресуем на главную страницу
+            login(request, user)
+            return redirect('start_page')  # Переадресация на главную страницу
+        else:
+            # Если неверный логин или пароль
+            return render(request, 'login.html', {'error': 'Неверное имя пользователя или пароль'})
+    return render(request, 'login.html')
+
+```
+37. Обновление шаблона авторизации
+
+Далее необходимо обновить шаблон авторизации, чтобы он мог отображать сообщение об ошибке в случае неудачной попытки входа (например, если логин или пароль введены неправильно).
+Добавляю в шаблон `login.html` следующий код
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+    <h1>Авторизация</h1>
+
+    <!-- Отображение сообщения об ошибке, если введены неверные данные -->
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Войти</button>
+    </form>
+
+    <p>Еще нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
+{% endblock %}
+
+```
