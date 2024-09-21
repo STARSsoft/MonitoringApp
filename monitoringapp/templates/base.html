@@ -10,12 +10,22 @@
             text-align: center;
             font-family: Arial, sans-serif;
         }
+
         .banner {
-            width: 100%;
+            width: 100%; /* Занимает всю ширину родительского контейнера */
             height: 150px;
             background-image: url("{% static 'core/images/banner2.jpg' %}");
             background-size: cover;
+            max-width: 1080px; /* Максимальная ширина */
         }
+
+        .banner-container {
+            display: flex;
+            justify-content: center; /* Центрирование по горизонтали */
+        }
+
+
+
         .menu {
             background-color: #add8e6; /* Светло-голубой фон */
             padding: 10px;
@@ -34,8 +44,9 @@
     </style>
 </head>
 <body>
-    <div class="banner">
-        <!-- Баннер из картинки banner2.jpg -->
+    <div class="banner-container">
+        <div class="banner">
+            </div>
     </div>
     <div class="menu">
         <a href="{% url 'start_page' %}">Главная</a>
