@@ -8,6 +8,12 @@ from django.contrib.auth import update_session_auth_hash
 from .forms import UserProfileForm
 
 
+
+# Страница для ввода цен
+@login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
+def price_add(request):
+    return render(request, 'price_add.html')
+
 # Личный кабинет
 @login_required(login_url='login_required')  # Переадресация на специальную страницу
 def profile_view(request):
@@ -87,9 +93,6 @@ def profile_view(request):
 
 def start_page(request):
     return render(request, 'start_page.html')
-
-def price_add(request):
-    return render(request, 'price_add.html')
 
 def statistics(request):
     return render(request, 'statistics.html')
