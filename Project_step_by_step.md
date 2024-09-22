@@ -783,3 +783,111 @@ def price_add(request):
     return render(request, 'price_add.html') 
 ```
 В других файлах уже больше ничего добавлять не надо, так как мы это сделали еще ранее, когда настраивали переадресацию при входе в личный кабинет.
+49. На текущем этапе, внешний вид форм авторизации, регистрации и личного кабинета, выглядят, мягко сказать, не красиво. Поэтому имеет смысл чуть-чуть улучшить их дизайн. 
+Начну с формы авторизации. В базовый шаблон формы `login.html`, вносим следующий код:
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+    <h1>Авторизация</h1>
+
+    <!-- Отображение сообщения об ошибке, если введены неверные данные -->
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" class="login-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="login-button">Войти</button>
+    </form>
+
+    <p>Еще нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
+{% endblock %}
+```
+50. Добавление стилей
+
+Для улучшения дизайна формы, добавим следующие стили прямо в наш базовый шаблон `base.html`, чтобы они применялись ко всем формам авторизации.
+Я вставил эти стили в `<style>` внутри `<head>` базового шаблона:
+``` 
+<style>
+    .login-form {
+        max-width: 400px;
+        margin: 0 auto; /* Центрируем форму на странице */
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;  /* Отступ между полями ввода */
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 16px;  /* Увеличим шрифт */
+    }
+
+    .form-group input {
+        width: 100%;  /* Поля занимают всю ширину контейнера */
+        padding: 10px;
+        font-size: 16px;  /* Увеличим шрифт для удобства */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;  /* Чтобы padding не влиял на ширину */
+    }
+
+    .login-button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #add8e6;  /* Светло голубой цвет кнопки */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .login-button:hover {
+        background-color: #3543de; /* Синий цвет кнопки при наведении */
+    }
+
+    /* Для отступов внизу и центре */
+    .login-form h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .login-form p {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    /* Для отображения ошибок */
+    .login-form p.error {
+        color: red;
+        text-align: center;
+    }
+</style>
+
+```
+Что изменилось:
+*    Размер полей: Поля для ввода username и password занимают всю ширину контейнера (100%), имеют padding для большего пространства и шрифт 16px.
+*    Отступы: Добавлены отступы между полями ввода и кнопкой — 20px через класс .form-group.
+*    Кнопка "Войти": Стала занимать всю ширину контейнера, имеет padding для увеличения высоты, увеличен шрифт, и добавлены стили для hover-эффекта.
+*    Центрирование формы: Форма центрирована по странице через margin: 0 auto, чтобы она выглядела аккуратно.
+*    Оформление заголовка: Заголовок "Авторизация" центрирован и отделён от формы дополнительным отступом.
+*    Сообщение об ошибке: Ошибки, если они есть, отображаются в центре страницы с красным цветом.
