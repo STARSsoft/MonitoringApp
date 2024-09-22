@@ -1,32 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Личный кабинет{% endblock %}
+{% block title %}Профиль{% endblock %}
 
 {% block content %}
-    <h1>Личный кабинет</h1>
-    <p>Добро пожаловать, {{ user.username }}!</p>
+    <h1>Профиль</h1>
 
     <!-- Форма для редактирования профиля -->
-    <h2>Редактирование профиля</h2>
-    <form method="POST">
+    <form method="POST" class="profile-form">
         {% csrf_token %}
         {{ profile_form.as_p }}
-        <button type="submit" name="update_profile">Обновить профиль</button>
+        <button type="submit" class="save-button">Сохранить изменения</button>
     </form>
 
     <!-- Форма для смены пароля -->
     <h2>Изменить пароль</h2>
-    <form method="POST">
+    <form method="POST" class="password-form">
         {% csrf_token %}
         {{ password_form.as_p }}
-        <button type="submit" name="change_password">Изменить пароль</button>
+        <button type="submit" class="save-button">Изменить пароль</button>
     </form>
-
-    <!-- Форма для выхода из аккаунта -->
-    <h2>Выйти</h2>
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Выйти</button>
-    </form>
-
 {% endblock %}
