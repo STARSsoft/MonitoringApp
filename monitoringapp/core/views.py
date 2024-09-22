@@ -7,8 +7,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .forms import UserProfileForm
 
-
-
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
 def price_add(request):
@@ -27,8 +25,6 @@ def profile_view(request):
 def login_required_view(request):
     return render(request, 'login_required.html')
 
-
-
 def register_view(request):
     print("Регистрация: представление вызвано!")  # Текст для проверки
     if request.method == 'POST':
@@ -42,8 +38,6 @@ def register_view(request):
         form = UserRegistrationForm()
 
     return render(request, 'register.html', {'form': form})
-
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -87,8 +81,6 @@ def profile_view(request):
         'password_form': password_form,
     })
 
-
-
 # Остальные представления
 
 def start_page(request):
@@ -99,4 +91,3 @@ def statistics(request):
 
 def about_us(request):
     return render(request, 'about_us.html')
-

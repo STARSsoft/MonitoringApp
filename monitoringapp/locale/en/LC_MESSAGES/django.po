@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 14:08+0500\n"
+"POT-Creation-Date: 2024-09-22 21:23+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: templates/core/main_page.html:10
-msgid "Главная"
-msgstr ""
-
-#: templates/core/start_page.html:10
-msgid "Мониторинг цен на продукты питания"
-msgstr ""
-
-#: templates/core/start_page.html:11
-msgid "Выберите язык"
-msgstr ""
-
-#: templates/core/start_page.html:12
+#: monitoringapp/monitoringapp/settings.py:125
 msgid "Русский"
-msgstr ""
+msgstr "Russian"
 
-#: templates/core/start_page.html:13
-msgid "Қазақша"
-msgstr ""
-
-#: templates/core/start_page.html:14
+#: monitoringapp/monitoringapp/settings.py:126
 msgid "English"
-msgstr ""
+msgstr "English"
 
-#: templates/core/test_page.html:28
-msgid "Пример текста для перевода"
-msgstr ""
+#: monitoringapp/monitoringapp/settings.py:127
+msgid "Қазақша"
+msgstr "Kazakh"
