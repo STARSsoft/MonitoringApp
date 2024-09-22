@@ -891,3 +891,85 @@ def price_add(request):
 *    Центрирование формы: Форма центрирована по странице через margin: 0 auto, чтобы она выглядела аккуратно.
 *    Оформление заголовка: Заголовок "Авторизация" центрирован и отделён от формы дополнительным отступом.
 *    Сообщение об ошибке: Ошибки, если они есть, отображаются в центре страницы с красным цветом.
+
+51. Теперь сделаем то же самое для формы регистрации. В шаблоне формы `register.html` меняем код:
+``` 
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    <h1>Регистрация</h1>
+    <form method="POST" class="registration-form">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Используем стандартный вывод полей формы -->
+        <button type="submit" class="register-button">Зарегистрироваться</button>
+    </form>
+    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
+{% endblock %}
+```
+52. Так же добавляем стили для формы в базовый шаблон:
+``` 
+    .registration-form {
+        max-width: 400px;
+        margin: 0 auto; /* Центрируем форму на странице */
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .registration-form .form-group {
+        margin-bottom: 20px;  /* Отступ между полями ввода */
+        text-align: left;
+    }
+
+    .registration-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 16px;  /* Увеличим шрифт */
+    }
+
+    .registration-form input {
+        width: 100%;  /* Поля занимают всю ширину контейнера */
+        padding: 10px;
+        font-size: 16px;  /* Увеличим шрифт для удобства */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;  /* Чтобы padding не влиял на ширину */
+    }
+
+    .register-button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #add8e6;  /* Светло-голубой цвет кнопки */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .register-button:hover {
+        background-color: #3543de; /* Синий цвет кнопки при наведении */
+    }
+
+    /* Для отступов внизу и центре */
+    .registration-form h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .registration-form p {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    /* Для отображения ошибок */
+    .registration-form p.error {
+        color: red;
+        text-align: center;
+    }
+```
+Теперь форма выглядит так же как и форма авторизации. 

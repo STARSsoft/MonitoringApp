@@ -4,10 +4,10 @@
 
 {% block content %}
     <h1>Регистрация</h1>
-    <form method="POST">
+    <form method="POST" class="registration-form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Зарегистрироваться</button>
+        {{ form.as_p }}  <!-- Используем стандартный вывод полей формы -->
+        <button type="submit" class="register-button">Зарегистрироваться</button>
     </form>
     <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
 {% endblock %}
