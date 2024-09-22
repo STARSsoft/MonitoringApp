@@ -11,12 +11,18 @@
             font-family: Arial, sans-serif;
         }
 
+        /* Общий контейнер для сайта */
+        .container {
+            max-width: 1200px; /* Ширина сайта 1200px */
+            margin: 0 auto;  /* Центрирование сайта, с пустым пространством слева и справа */
+        }
+
         .banner {
-            width: 100%; /* Занимает всю ширину родительского контейнера */
+            width: 1200px;
             height: 150px;
             background-image: url("{% static 'core/images/banner2.jpg' %}");
             background-size: cover;
-            max-width: 1080px; /* Максимальная ширина */
+            max-width: 100%;
         }
 
         .banner-container {
@@ -24,41 +30,123 @@
             justify-content: center; /* Центрирование по горизонтали */
         }
 
-
-
         .menu {
             background-color: #add8e6; /* Светло-голубой фон */
             padding: 10px;
             margin-top: 20px;
             border-radius: 5px; /* Слегка закругленные углы */
+            display: flex;
+            justify-content: center; /* Центрирование по горизонтали */
+            align-items: center;
         }
+
         .menu a {
             margin: 0 15px;
             text-decoration: none;
             color: black;
             font-size: 18px;
         }
+
         .menu a:hover {
             text-decoration: underline;
+        }
+
+        .auth-button {
+            margin-left: auto;  /* Отодвигает кнопку авторизации в конец меню */
+            position: relative;  /* Для позиционирования выпадающего меню */
+        }
+
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* Стили для выпадающего меню */
+        .dropdown-menu {
+            display: none;  /* По умолчанию скрыто */
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            min-width: 150px;
+            padding: 5px;
+            border-radius: 5px;
+            text-align: left; /* Выровняем текст влево */
+        }
+
+        .auth-button:hover .dropdown-menu {
+            display: block;  /* Показываем при наведении */
+        }
+
+        .dropdown-menu a, .dropdown-menu form {
+            display: block;
+            padding: 5px 0;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;  /* Устанавливаем одинаковый размер шрифта */
+            text-align: left;  /* Выравниваем текст по левому краю */
+        }
+
+        .dropdown-menu a:hover, .dropdown-menu form button:hover {
+            text-decoration: underline;
+        }
+
+        .dropdown-menu form button {
+            border: none;
+            background: none;
+            padding: 0;
+            font-size: 16px;
+            color: black;
+            cursor: pointer;
+            text-align: left;  /* Выравниваем текст по левому краю */
         }
     </style>
 </head>
 <body>
     <div class="banner-container">
-        <div class="banner">
+        <div class="banner"></div>
+    </div>
+
+    <!-- Основной контейнер сайта с шириной 1200px -->
+    <div class="container">
+        <div class="menu">
+            <a href="{% url 'start_page' %}">Главная</a>
+            <a href="{% url 'price_add' %}">Добавить цены</a>
+            <a href="{% url 'statistics' %}">Статистика</a>
+            <a href="{% url 'about_us' %}">О нас</a>
+
+            <!-- Кнопка авторизации или личного кабинета -->
+            <div class="auth-button">
+                {% if user.is_authenticated %}
+                    <a href="#">
+                        <img src="{% static 'core/images/user.png' %}" alt="Пользователь" class="user-icon">
+                        {{ user.username }}
+                    </a>
+
+                    <!-- Выпадающее меню -->
+                    <div class="dropdown-menu">
+                        <a href="{% url 'profile' %}">Профиль</a>
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                         <div> &nbsp;&nbsp;  <button type="submit">Выйти</button></div>
+                        </form>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}">Войти</a>
+                {% endif %}
             </div>
-    </div>
-    <div class="menu">
-        <a href="{% url 'start_page' %}">Главная</a>
-        <a href="{% url 'price_add' %}">Добавить цены</a>
-        <a href="{% url 'statistics' %}">Статистика</a>
-        <a href="{% url 'about_us' %}">О нас</a>
-    </div>
-    
-    <div class="content">
-        {% block content %}
-        <!-- Контент страниц -->
-        {% endblock %}
+        </div>
+
+        <div class="content">
+            {% block content %}
+            <!-- Контент страниц -->
+            {% endblock %}
+        </div>
     </div>
 </body>
 </html>
