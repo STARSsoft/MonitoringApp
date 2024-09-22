@@ -8,6 +8,20 @@ from django.contrib.auth import update_session_auth_hash
 from .forms import UserProfileForm
 
 
+# Личный кабинет
+@login_required(login_url='login_required')  # Переадресация на специальную страницу
+def profile_view(request):
+    if request.method == 'POST':
+        # Логика обработки профиля
+        ...
+    else:
+        return render(request, 'profile.html')
+
+# Страница для неавторизованных пользователей
+def login_required_view(request):
+    return render(request, 'login_required.html')
+
+
 
 def register_view(request):
     print("Регистрация: представление вызвано!")  # Текст для проверки

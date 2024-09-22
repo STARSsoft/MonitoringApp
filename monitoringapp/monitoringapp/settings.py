@@ -143,3 +143,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGOUT_REDIRECT_URL = 'start_page'      # настройка редиректа для выхода из профиля
+LOGIN_URL = 'login_required'  # Страница, на которую перенаправляются неавторизованные пользователи
+

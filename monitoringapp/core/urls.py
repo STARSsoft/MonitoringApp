@@ -12,5 +12,7 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),    # Путь для страницы регистрации
     path('profile/', views.profile_view, name='profile'),       # Путь для страницы личного кабинета
     path('logout/', auth_views.LogoutView.as_view(), name='logout'), # Путь для деавторизации
+    path('login-required/', views.login_required_view, name='login_required'),
+
 ]
 
