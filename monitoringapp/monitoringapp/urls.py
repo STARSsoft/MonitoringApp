@@ -14,6 +14,12 @@ from django.urls import path
 from django.conf.urls.i18n import i18n_patterns
 from core import views
 from django.contrib.auth import views as auth_views
+from django.conf.urls import include
+from django.conf import settings
+from django.conf.urls.i18n import set_language
+
+
+
 
 # Маршруты с поддержкой многоязычности
 urlpatterns = i18n_patterns(
@@ -27,4 +33,5 @@ urlpatterns = i18n_patterns(
     path('profile/', views.profile_view, name='profile'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login-required/', views.login_required_view, name='login_required'),
+    path('set-language/', set_language, name='set_language'),  # Маршрут для смены языка
 )

@@ -337,6 +337,18 @@
                     <a href="{% url 'login' %}">{% trans "Войти" %}</a>
                 {% endif %}
             </div>
+            <form action="{% url 'set_language' %}" method="post" style="margin-left: 20px;">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.path }}">
+        <select name="language" onchange="this.form.submit()" style="padding: 5px; font-size: 16px;">
+            <option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+            <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+            <option value="kk" {% if LANGUAGE_CODE == 'kk' %}selected{% endif %}>Қазақша</option>
+        </select>
+    </form>
+
+
+
         </div>
 
         <div class="content">
