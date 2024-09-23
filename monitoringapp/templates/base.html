@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Мониторинг цен{% endblock %}</title>
+    <title>{% block title %}{% trans "Мониторинг цен" %}{% endblock %}</title>
     <style>
 
 /* Общие стили для формы личного кабинета */
@@ -311,10 +312,10 @@
     <!-- Основной контейнер сайта с шириной 1200px -->
     <div class="container">
         <div class="menu">
-            <a href="{% url 'start_page' %}">Главная</a>
-            <a href="{% url 'price_add' %}">Добавить цены</a>
-            <a href="{% url 'statistics' %}">Статистика</a>
-            <a href="{% url 'about_us' %}">О нас</a>
+        <a href="{% url 'start_page' %}">{% trans "Главная" %}</a>
+        <a href="{% url 'price_add' %}">{% trans "Добавить цены" %}</a>
+        <a href="{% url 'statistics' %}">{% trans "Статистика" %}</a>
+        <a href="{% url 'about_us' %}">{% trans "О нас" %}</a>
 
             <!-- Кнопка авторизации или личного кабинета -->
             <div class="auth-button">
