@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Профиль{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
-    <h1>Профиль</h1>
+    <h1>{% trans "Профиль" %}</h1>
 
     <!-- Форма для редактирования профиля -->
     <form method="POST" class="profile-form">
         {% csrf_token %}
         {{ profile_form.as_p }}
-        <button type="submit" name="update_profile" class="save-button">Сохранить изменения</button>
+        <button type="submit" name="update_profile" class="save-button">{% trans "Сохранить изменения" %}</button>
     </form>
 
     <!-- Форма для смены пароля -->
-    <h2>Изменить пароль</h2>
+    <h2>{% trans "Изменить пароль" %}</h2>
     <form method="POST" class="password-form">
         {% csrf_token %}
         {{ password_form.as_p }}
-        <button type="submit" name="change_password" class="save-button">Изменить пароль</button>
+        <button type="submit" name="change_password" class="save-button">{% trans "Изменить пароль" %}</button>
     </form>
 {% endblock %}
