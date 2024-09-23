@@ -1,0 +1,38 @@
+monitoringapp/
+├── core/
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│ 
+├── locale/
+│   ├── en/
+│   ├── kk/
+│   ├── ru/
+│ 
+├── monitoringapp/
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│ 
+├── static/
+│   ├── core/
+│   │   ├── images/
+│   │   │   ├── banner2.jpg
+│   │   │   ├── user.png  
+│   │   │   ├── logo.png  
+│ 
+├── templates/
+│   ├── about_us.html
+│   ├── base.html
+│   ├── login.html
+│   ├── login_required.html
+│   ├── price_add.html
+│   ├── profile.html
+│   ├── register.html
+│   ├── start_page.html
+│   ├── statistics.html
