@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .forms import UserProfileForm
 
+
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
 def price_add(request):
@@ -59,19 +60,22 @@ def login_view(request):
 
 @login_required
 def profile_view(request):
+    # Обработка формы редактирования профиля
     if request.method == 'POST':
-        # Обработка формы профиля
-        profile_form = UserProfileForm(request.POST, instance=request.user)
-        password_form = PasswordChangeForm(request.user, request.POST)
+        if 'update_profile' in request.POST:
+            profile_form = UserProfileForm(request.POST, instance=request.user)
+            if profile_form.is_valid():
+                profile_form.save()  # Сохраняем изменения в профиль
+                return redirect('profile')  # Перенаправляем обратно в профиль
 
-        if 'update_profile' in request.POST and profile_form.is_valid():
-            profile_form.save()
-            return redirect('profile')
+        # Обработка формы смены пароля
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()  # Сохраняем новый пароль
+                update_session_auth_hash(request, user)  # Обновляем сессию, чтобы не разлогинило
+                return redirect('profile')
 
-        elif 'change_password' in request.POST and password_form.is_valid():
-            user = password_form.save()
-            update_session_auth_hash(request, user)  # Чтобы пользователь не был разлогинен после смены пароля
-            return redirect('profile')
     else:
         profile_form = UserProfileForm(instance=request.user)
         password_form = PasswordChangeForm(request.user)
@@ -80,6 +84,10 @@ def profile_view(request):
         'profile_form': profile_form,
         'password_form': password_form,
     })
+
+
+
+
 
 # Остальные представления
 

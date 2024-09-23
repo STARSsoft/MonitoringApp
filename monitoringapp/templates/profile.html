@@ -9,7 +9,7 @@
     <form method="POST" class="profile-form">
         {% csrf_token %}
         {{ profile_form.as_p }}
-        <button type="submit" class="save-button">Сохранить изменения</button>
+        <button type="submit" name="update_profile" class="save-button">Сохранить изменения</button>
     </form>
 
     <!-- Форма для смены пароля -->
@@ -17,6 +17,6 @@
     <form method="POST" class="password-form">
         {% csrf_token %}
         {{ password_form.as_p }}
-        <button type="submit" class="save-button">Изменить пароль</button>
+        <button type="submit" name="change_password" class="save-button">Изменить пароль</button>
     </form>
 {% endblock %}

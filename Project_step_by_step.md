@@ -986,7 +986,7 @@ def price_add(request):
     <form method="POST" class="profile-form">
         {% csrf_token %}
         {{ profile_form.as_p }}
-        <button type="submit" class="save-button">Сохранить изменения</button>
+        <button type="submit" name="update_profile" class="save-button">Сохранить изменения</button>
     </form>
 
     <!-- Форма для смены пароля -->
@@ -994,7 +994,7 @@ def price_add(request):
     <form method="POST" class="password-form">
         {% csrf_token %}
         {{ password_form.as_p }}
-        <button type="submit" class="save-button">Изменить пароль</button>
+        <button type="submit" name="change_password" class="save-button">Изменить пароль</button>
     </form>
 {% endblock %}
 ```
@@ -1069,4 +1069,33 @@ def price_add(request):
         background-color: #3543de;
     }
 </style>
+```
+55. В ходе разработки, была протестирована страница личного кабинета и выяснилось, что форма не записывает обновленные данные в базу данных. Поэтому в файл представлений `views.py` были внесены некоторые изменения для формы личного кабинета:
+``` 
+@login_required
+def profile_view(request):
+    # Обработка формы редактирования профиля
+    if request.method == 'POST':
+        if 'update_profile' in request.POST:
+            profile_form = UserProfileForm(request.POST, instance=request.user)
+            if profile_form.is_valid():
+                profile_form.save()  # Сохраняем изменения в профиль
+                return redirect('profile')  # Перенаправляем обратно в профиль
+
+        # Обработка формы смены пароля
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()  # Сохраняем новый пароль
+                update_session_auth_hash(request, user)  # Обновляем сессию, чтобы не разлогинило
+                return redirect('profile')
+
+    else:
+        profile_form = UserProfileForm(instance=request.user)
+        password_form = PasswordChangeForm(request.user)
+
+    return render(request, 'profile.html', {
+        'profile_form': profile_form,
+        'password_form': password_form,
+    })
 ```
