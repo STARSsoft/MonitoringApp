@@ -327,14 +327,14 @@
 
                     <!-- Выпадающее меню -->
                     <div class="dropdown-menu">
-                        <a href="{% url 'profile' %}">Профиль</a>
+                        <a href="{% url 'profile' %}">{% trans "Профиль" %}</a>
                         <form method="POST" action="{% url 'logout' %}">
                             {% csrf_token %}
-                         <div> &nbsp;&nbsp;  <button type="submit">Выйти</button></div>
+                         <div> &nbsp;&nbsp;  <button type="submit">{% trans "Выйти" %}</button></div>
                         </form>
                     </div>
                 {% else %}
-                    <a href="{% url 'login' %}">Войти</a>
+                    <a href="{% url 'login' %}">{% trans "Войти" %}</a>
                 {% endif %}
             </div>
         </div>
