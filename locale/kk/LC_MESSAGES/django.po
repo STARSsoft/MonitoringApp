@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-23 20:14+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+#: monitoringapp/monitoringapp/settings.py:106
+msgid "Русский"
+msgstr "Орыс"
+
+#: monitoringapp/monitoringapp/settings.py:107
+msgid "English"
+msgstr "Ағылшын"
+
+#: monitoringapp/monitoringapp/settings.py:108
+msgid "Қазақша"
+msgstr "Қазақ"
+
+#: monitoringapp/templates/about_us.html:4
+#: monitoringapp/templates/base.html:318
+msgid "О нас"
+msgstr "Біз туралы"
+
+#: monitoringapp/templates/about_us.html:7
+msgid "Страница с информацией о нас"
+msgstr "Біз туралы ақпарат"
+
+#: monitoringapp/templates/base.html:8
+msgid "Мониторинг цен"
+msgstr "Бағаны бақылау"
+
+#: monitoringapp/templates/base.html:315
+msgid "Главная"
+msgstr "Басты бет"
+
+#: monitoringapp/templates/base.html:316
+#: monitoringapp/templates/price_add.html:4
+msgid "Добавить цены"
+msgstr "Баға қосу"
+
+#: monitoringapp/templates/base.html:317
+#: monitoringapp/templates/statistics.html:4
+msgid "Статистика"
+msgstr "Статистика"
+
+#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:7
+msgid "Профиль"
+msgstr "Профиль"
+
+#: monitoringapp/templates/base.html:333
+msgid "Выйти"
+msgstr "Шығу"
+
+#: monitoringapp/templates/base.html:337 monitoringapp/templates/login.html:24
+#: monitoringapp/templates/login_required.html:10
+msgid "Войти"
+msgstr "Кіру"
+
+#: monitoringapp/templates/login.html:4 monitoringapp/templates/login.html:7
+msgid "Авторизация"
+msgstr "Авторизация"
+
+#: monitoringapp/templates/login.html:17
+msgid "Имя пользователя"
+msgstr "Пайдаланушы аты"
+
+#: monitoringapp/templates/login.html:21
+msgid "Пароль"
+msgstr "Құпия сөз"
+
+#: monitoringapp/templates/login.html:27
+msgid "Еще нет аккаунта?"
+msgstr "Тіркелгіңіз жоқ па?"
+
+#: monitoringapp/templates/login.html:27
+msgid "Зарегистрируйтесь"
+msgstr "Тіркелу"
+
+#: monitoringapp/templates/login_required.html:4
+#: monitoringapp/templates/login_required.html:7
+msgid "Требуется авторизация"
+msgstr "Авторизация қажет"
+
+#: monitoringapp/templates/login_required.html:8
+msgid "Данный раздел доступен только авторизованным пользователям. Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
+msgstr "Бұл бөлім тек тіркелген пайдаланушылар үшін қолжетімді. Бетті көру үшін тіркеліңіз немесе жүйеге кіріңіз."
+
+#: monitoringapp/templates/login_required.html:10
+msgid "или"
+msgstr "немесе"
+
+#: monitoringapp/templates/login_required.html:11
+#: monitoringapp/templates/register.html:11
+msgid "Зарегистрироваться"
+msgstr "Тіркелу"
+
+#: monitoringapp/templates/price_add.html:7
+msgid "Страница добавления цен"
+msgstr "Баға қосу беті"
+
+#: monitoringapp/templates/profile.html:13
+msgid "Сохранить изменения"
+msgstr "Өзгерістерді сақтау"
+
+#: monitoringapp/templates/profile.html:17
+#: monitoringapp/templates/profile.html:21
+msgid "Изменить пароль"
+msgstr "Құпия сөзді өзгерту"
+
+#: monitoringapp/templates/register.html:4
+#: monitoringapp/templates/register.html:7
+msgid "Регистрация"
+msgstr "Тіркелу"
+
+#: monitoringapp/templates/register.html:13
+msgid "Уже есть аккаунт?"
+msgstr "Тіркелгіңіз бар ма?"
+
+#: monitoringapp/templates/register.html:13
+msgid "Войдите"
+msgstr "Кіру"
+
+#: monitoringapp/templates/start_page.html:4
+msgid "Главная страница"
+msgstr "Басты бет"
+
+#: monitoringapp/templates/start_page.html:7
+msgid "Мониторинг цен на продукты питания"
+msgstr "Азық-түлік бағасын бақылау"
+
+#: monitoringapp/templates/statistics.html:7
+msgid "Страница для вывода статистики"
+msgstr "Статистиканы шығару беті"

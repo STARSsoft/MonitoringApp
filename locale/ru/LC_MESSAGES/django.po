@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-23 20:14+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: monitoringapp/monitoringapp/settings.py:106
+msgid "Русский"
+msgstr "Русский"
+
+#: monitoringapp/monitoringapp/settings.py:107
+msgid "English"
+msgstr "Английский"
+
+#: monitoringapp/monitoringapp/settings.py:108
+msgid "Қазақша"
+msgstr "Казахский"
+
+#: monitoringapp/templates/about_us.html:4
+#: monitoringapp/templates/base.html:318
+msgid "О нас"
+msgstr "О нас"
+
+#: monitoringapp/templates/about_us.html:7
+msgid "Страница с информацией о нас"
+msgstr "Страница с информацией о нас"
+
+#: monitoringapp/templates/base.html:8
+msgid "Мониторинг цен"
+msgstr "Мониторинг цен"
+
+#: monitoringapp/templates/base.html:315
+msgid "Главная"
+msgstr "Главная"
+
+#: monitoringapp/templates/base.html:316
+#: monitoringapp/templates/price_add.html:4
+msgid "Добавить цены"
+msgstr "Добавить цены"
+
+#: monitoringapp/templates/base.html:317
+#: monitoringapp/templates/statistics.html:4
+msgid "Статистика"
+msgstr "Статистика"
+
+#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:7
+msgid "Профиль"
+msgstr "Профиль"
+
+#: monitoringapp/templates/base.html:333
+msgid "Выйти"
+msgstr "Выйти"
+
+#: monitoringapp/templates/base.html:337 monitoringapp/templates/login.html:24
+#: monitoringapp/templates/login_required.html:10
+msgid "Войти"
+msgstr "Войти"
+
+#: monitoringapp/templates/login.html:4 monitoringapp/templates/login.html:7
+msgid "Авторизация"
+msgstr "Авторизация"
+
+#: monitoringapp/templates/login.html:17
+msgid "Имя пользователя"
+msgstr "Имя пользователя"
+
+#: monitoringapp/templates/login.html:21
+msgid "Пароль"
+msgstr "Пароль"
+
+#: monitoringapp/templates/login.html:27
+msgid "Еще нет аккаунта?"
+msgstr "Еще нет аккаунта?"
+
+#: monitoringapp/templates/login.html:27
+msgid "Зарегистрируйтесь"
+msgstr "Зарегистрируйтесь"
+
+#: monitoringapp/templates/login_required.html:4
+#: monitoringapp/templates/login_required.html:7
+msgid "Требуется авторизация"
+msgstr "Требуется авторизация"
+
+#: monitoringapp/templates/login_required.html:8
+msgid "Данный раздел доступен только авторизованным пользователям. Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
+msgstr "Данный раздел доступен только авторизованным пользователям. Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
+
+#: monitoringapp/templates/login_required.html:10
+msgid "или"
+msgstr "или"
+
+#: monitoringapp/templates/login_required.html:11
+#: monitoringapp/templates/register.html:11
+msgid "Зарегистрироваться"
+msgstr "Зарегистрироваться"
+
+#: monitoringapp/templates/price_add.html:7
+msgid "Страница добавления цен"
+msgstr "Страница добавления цен"
+
+#: monitoringapp/templates/profile.html:13
+msgid "Сохранить изменения"
+msgstr "Сохранить изменения"
+
+#: monitoringapp/templates/profile.html:17
+#: monitoringapp/templates/profile.html:21
+msgid "Изменить пароль"
+msgstr "Изменить пароль"
+
+#: monitoringapp/templates/register.html:4
+#: monitoringapp/templates/register.html:7
+msgid "Регистрация"
+msgstr "Регистрация"
+
+#: monitoringapp/templates/register.html:13
+msgid "Уже есть аккаунт?"
+msgstr "Уже есть аккаунт?"
+
+#: monitoringapp/templates/register.html:13
+msgid "Войдите"
+msgstr "Войдите"
+
+#: monitoringapp/templates/start_page.html:4
+msgid "Главная страница"
+msgstr "Главная страница"
+
+#: monitoringapp/templates/start_page.html:7
+msgid "Мониторинг цен на продукты питания"
+msgstr "Мониторинг цен на продукты питания"
+
+#: monitoringapp/templates/statistics.html:7
+msgid "Страница для вывода статистики"
+msgstr "Страница для вывода статистики"
