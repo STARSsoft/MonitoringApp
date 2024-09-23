@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Главная страница{% endblock %}
+{% block title %}{% trans "Главная страница" %}{% endblock %}
 
 {% block content %}
-    <h1>Мониторинг цен на продукты питания</h1>
+    <h1>{% trans "Мониторинг цен на продукты питания" %}</h1>
     <p>Русский | Қазақша | English</p>
 {% endblock %}
