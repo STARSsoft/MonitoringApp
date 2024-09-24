@@ -14,19 +14,15 @@ msgstr ""
 
 #: monitoringapp/core/forms.py:32
 msgid "Email address"
-msgstr ""
+msgstr "Email address"
 
 #: monitoringapp/core/forms.py:44
-#, fuzzy
-#| msgid "Изменить пароль"
 msgid "Новый пароль"
-msgstr "Change Password"
+msgstr "New Password"
 
 #: monitoringapp/core/forms.py:51
-#, fuzzy
-#| msgid "Изменить пароль"
 msgid "Подтвердите новый пароль"
-msgstr "Change Password"
+msgstr "Confirm new Password"
 
 #: monitoringapp/core/views.py:94 monitoringapp/templates/start_page.html:4
 msgid "Главная страница"
@@ -184,3 +180,4 @@ msgstr "Statistics Page"
 
 #~ msgid "This is a test string"
 #~ msgstr "Это тестовая строка"
+
