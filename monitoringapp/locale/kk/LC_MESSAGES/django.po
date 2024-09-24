@@ -1,0 +1,153 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonitoringApp 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-24 08:55+0500\n"
+"PO-Revision-Date: 2024-09-24 08:55+0500\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Kazakh <kk@li.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: monitoringapp/core/views.py:91 monitoringapp/templates/start_page.html:4
+msgid "Главная страница"
+msgstr "Басты бет"
+
+#: monitoringapp/monitoringapp/settings.py:109
+msgid "Русский"
+msgstr "Орысша"
+
+#: monitoringapp/monitoringapp/settings.py:110
+msgid "English"
+msgstr "Ағылшын"
+
+#: monitoringapp/monitoringapp/settings.py:111
+msgid "Қазақша"
+msgstr "Қазақша"
+
+#: monitoringapp/templates/about_us.html:4
+#: monitoringapp/templates/about_us.html:14
+#: monitoringapp/templates/base.html:318
+msgid "О нас"
+msgstr "Біз туралы"
+
+#: monitoringapp/templates/about_us.html:7
+#: monitoringapp/templates/about_us.html:15
+msgid "Страница с информацией о нас"
+msgstr "Біз туралы ақпарат беті"
+
+#: monitoringapp/templates/base.html:8
+msgid "Мониторинг цен"
+msgstr "Бағаларды бақылау"
+
+#: monitoringapp/templates/base.html:315
+msgid "Главная"
+msgstr "Басты бет"
+
+#: monitoringapp/templates/base.html:316
+#: monitoringapp/templates/price_add.html:4
+msgid "Добавить цены"
+msgstr "Бағаларды қосу"
+
+#: monitoringapp/templates/base.html:317
+#: monitoringapp/templates/statistics.html:4
+msgid "Статистика"
+msgstr "Статистика"
+
+#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:7
+msgid "Профиль"
+msgstr "Профиль"
+
+#: monitoringapp/templates/base.html:333
+msgid "Выйти"
+msgstr "Шығу"
+
+#: monitoringapp/templates/base.html:337 monitoringapp/templates/login.html:24
+#: monitoringapp/templates/login_required.html:10
+msgid "Войти"
+msgstr "Кіру"
+
+#: monitoringapp/templates/base.html:364
+msgid "Это тестовая строка для перевода"
+msgstr "Бұл аудару үшін тест жолы"
+
+#: monitoringapp/templates/base.html:366
+msgid "This is a test string"
+msgstr "Бұл тест жолы"
+
+#: monitoringapp/templates/login.html:4 monitoringapp/templates/login.html:7
+msgid "Авторизация"
+msgstr "Авторизация"
+
+#: monitoringapp/templates/login.html:17
+msgid "Имя пользователя"
+msgstr "Пайдаланушы аты"
+
+#: monitoringapp/templates/login.html:21
+msgid "Пароль"
+msgstr "Құпия сөз"
+
+#: monitoringapp/templates/login.html:27
+msgid "Еще нет аккаунта?"
+msgstr "Әлі аккаунтыңыз жоқ па?"
+
+#: monitoringapp/templates/login.html:27
+msgid "Зарегистрируйтесь"
+msgstr "Тіркелу"
+
+#: monitoringapp/templates/login_required.html:4
+#: monitoringapp/templates/login_required.html:7
+msgid "Требуется авторизация"
+msgstr "Авторизация қажет"
+
+#: monitoringapp/templates/login_required.html:8
+msgid ""
+"Данный раздел доступен только авторизованным пользователям. "
+"Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
+msgstr "Бұл бөлім тек авторизацияланған пайдаланушылар үшін қол жетімді. Көру үшін тіркеліңіз немесе кіріңіз."
+
+#: monitoringapp/templates/login_required.html:10
+msgid "или"
+msgstr "немесе"
+
+#: monitoringapp/templates/login_required.html:11
+#: monitoringapp/templates/register.html:11
+msgid "Зарегистрироваться"
+msgstr "Тіркелу"
+
+#: monitoringapp/templates/price_add.html:7
+msgid "Страница добавления цен"
+msgstr "Бағаларды қосу беті"
+
+#: monitoringapp/templates/profile.html:13
+msgid "Сохранить изменения"
+msgstr "Өзгерістерді сақтау"
+
+#: monitoringapp/templates/profile.html:17
+#: monitoringapp/templates/profile.html:21
+msgid "Изменить пароль"
+msgstr "Құпия сөзді өзгерту"
+
+#: monitoringapp/templates/register.html:4
+#: monitoringapp/templates/register.html:7
+msgid "Регистрация"
+msgstr "Тіркелу"
+
+#: monitoringapp/templates/register.html:13
+msgid "Уже есть аккаунт?"
+msgstr "Аккаунтыңыз бар ма?"
+
+#: monitoringapp/templates/register.html:13
+msgid "Войдите"
+msgstr "Кіру"
+
+#: monitoringapp/templates/start_page.html:7
+msgid "Мониторинг цен на продукты питания"
+msgstr "Азық-түлік бағаларын бақылау"
+
+#: monitoringapp/templates/statistics.html:7
+msgid "Страница для вывода статистики"
+msgstr "Статистика шығару беті"

@@ -1113,4 +1113,102 @@ def profile_view(request):
 
 ```
 В каждом шаблоне загружаем модуль `{% load i18n %}` который отвечает за локализацию. Так же во всех тегах, где есть выводимый в браузере текст, ставим модули перевода `{% trans "Тут любой текст" %}`
-57. 
+57. Когда все файлы подготовлены к локализации, необходимо скомпилировать файлы переводов.
+Для этого в терминале вводим команды:
+``` 
+django-admin makemessages -l ru
+django-admin makemessages -l en
+django-admin makemessages -l kk
+```
+Django создаст файлы перевода формата .po в папке locale
+58. В файлах django.po нужно перевести на соответсвующий язык все строки, которые система смогла найти на сайте.
+Например:
+``` 
+#: monitoringapp/core/views.py:91 monitoringapp/templates/start_page.html:4
+msgid "Главная страница"
+msgstr "Home Page"
+```
+59. После того как все переводы сделаны, нужно ввести в терминале команду:
+``` 
+django-admin compilemessages
+```
+В папке locale скомпилируются новые файлы переводов с расширением .mo
+60. Чтобы пользователи могли переключать языки, нужно вывести соответствующий инструмент на сайт. В базовый шаблон в разделе с меню добавляю следующий код:
+``` 
+<form action="{% url 'set_language' %}" method="post" style="margin-left: 20px;">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.path }}">
+        <select name="language" onchange="this.form.submit()" style="padding: 5px; font-size: 16px;">
+            <option value="ru" {% if request.LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+            <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+            <option value="kk" {% if request.LANGUAGE_CODE == 'kk' %}selected{% endif %}>Қазақша</option>
+        </select>
+</form>
+```
+61. Так же важно определить новые пути до всех файлов проекта. Поэтому вносим изменения в файл urls.py, который находится в папке monitoringapp, а не в папке core:
+``` 
+# monitoringapp/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
+from core import views
+from django.contrib.auth import views as auth_views
+
+# Подключаем URL для смены языка через стандартный обработчик
+urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),  # Включаем обработку изменения языка
+]
+
+# Многоязычные маршруты
+urlpatterns += i18n_patterns(
+    path('admin/', admin.site.urls),
+    path('', views.start_page, name='start_page'),
+    path('priceadd/', views.price_add, name='price_add'),
+    path('statistics/', views.statistics, name='statistics'),
+    path('about/', views.about_us, name='about_us'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('profile/', views.profile_view, name='profile'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('login-required/', views.login_required_view, name='login_required'),
+)
+```
+62. Ну и самое главное, в настройках сайта, в файле settings.py нужно внести следующие изменения:
+``` 
+from django.utils.translation import gettext_lazy as _
+
+# Язык по умолчанию
+LANGUAGE_CODE = 'ru'  # По умолчанию русский
+
+# Поддерживаемые языки
+LANGUAGES = [
+    ('ru', _('Русский')),
+    ('en', _('English')),
+    ('kk', _('Қазақша')),
+]
+
+USE_I18N = True  # Включаем интернационализацию (i18n)
+USE_L10N = True  # Включаем локализацию
+USE_TZ = True  # Часовые пояса
+
+# Путь для хранения файлов локализации
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',  # Путь для файлов перевода
+]
+
+```
+Так же в этом же файле необходимо дополнить раздел с middleware
+``` 
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # Часть которая отвечает за локализацию
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+```
+63. 

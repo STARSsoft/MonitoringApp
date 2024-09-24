@@ -1,28 +1,18 @@
-# # monitoringapp/urls.py
-#
-# from django.contrib import admin
-# from django.urls import path, include
-#
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('', include('core.urls')),  # Включаем маршруты из приложения 'core'
-#
-# ]
+# monitoringapp/urls.py
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 from core import views
 from django.contrib.auth import views as auth_views
-from django.conf.urls import include
-from django.conf import settings
-from django.conf.urls.i18n import set_language
 
+# Подключаем URL для смены языка через стандартный обработчик
+urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),  # Включаем обработку изменения языка
+]
 
-
-
-# Маршруты с поддержкой многоязычности
-urlpatterns = i18n_patterns(
+# Многоязычные маршруты
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', views.start_page, name='start_page'),
     path('priceadd/', views.price_add, name='price_add'),
@@ -33,5 +23,4 @@ urlpatterns = i18n_patterns(
     path('profile/', views.profile_view, name='profile'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login-required/', views.login_required_view, name='login_required'),
-    path('set-language/', set_language, name='set_language'),  # Маршрут для смены языка
 )
