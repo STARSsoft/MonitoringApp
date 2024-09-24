@@ -34,7 +34,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',  # Middleware для многоязычности
+    'django.middleware.locale.LocaleMiddleware',  # Это должно быть здесь
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -42,13 +42,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'monitoringapp.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Путь до основной папки с шаблонами
-        'APP_DIRS': True,  # Оставляем для поиска шаблонов в приложениях
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -56,9 +57,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'monitoringapp.wsgi.application'
 
@@ -114,6 +117,8 @@ USE_I18N = True  # Включаем интернационализацию
 USE_L10N = True  # Включаем локализацию
 USE_TZ = True  # Часовые пояса
 
+
+
 # Путь для хранения переводов
 LOCALE_PATHS = [
     BASE_DIR / 'locale',  # Создадим эту папку для хранения файлов перевода
@@ -139,3 +144,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGOUT_REDIRECT_URL = 'start_page'      # настройка редиректа для выхода из профиля
 LOGIN_URL = 'login_required'  # Страница, на которую перенаправляются неавторизованные пользователи
+

@@ -1,40 +1,41 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: MonitoringApp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-23 20:14+0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2024-09-24 08:55+0500\n"
+"PO-Revision-Date: 2024-09-24 08:55+0500\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: English <en@li.org>\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: monitoringapp/monitoringapp/settings.py:106
+
+#: monitoringapp/core/views.py:91 monitoringapp/templates/start_page.html:4
+msgid "Главная страница"
+msgstr "Home Page"
+
+#: monitoringapp/monitoringapp/settings.py:109
 msgid "Русский"
 msgstr "Russian"
 
-#: monitoringapp/monitoringapp/settings.py:107
+#: monitoringapp/monitoringapp/settings.py:110
 msgid "English"
 msgstr "English"
 
-#: monitoringapp/monitoringapp/settings.py:108
+#: monitoringapp/monitoringapp/settings.py:111
 msgid "Қазақша"
 msgstr "Kazakh"
 
 #: monitoringapp/templates/about_us.html:4
+#: monitoringapp/templates/about_us.html:14
 #: monitoringapp/templates/base.html:318
 msgid "О нас"
 msgstr "About Us"
 
 #: monitoringapp/templates/about_us.html:7
+#: monitoringapp/templates/about_us.html:15
 msgid "Страница с информацией о нас"
 msgstr "Page with information about us"
 
@@ -56,8 +57,7 @@ msgstr "Add Prices"
 msgid "Статистика"
 msgstr "Statistics"
 
-#: monitoringapp/templates/base.html:330
-#: monitoringapp/templates/profile.html:7
+#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:7
 msgid "Профиль"
 msgstr "Profile"
 
@@ -65,14 +65,20 @@ msgstr "Profile"
 msgid "Выйти"
 msgstr "Logout"
 
-#: monitoringapp/templates/base.html:337
-#: monitoringapp/templates/login.html:24
+#: monitoringapp/templates/base.html:337 monitoringapp/templates/login.html:24
 #: monitoringapp/templates/login_required.html:10
 msgid "Войти"
 msgstr "Login"
 
-#: monitoringapp/templates/login.html:4
-#: monitoringapp/templates/login.html:7
+#: monitoringapp/templates/base.html:364
+msgid "Это тестовая строка для перевода"
+msgstr "This is a test string for translation"
+
+#: monitoringapp/templates/base.html:366
+msgid "This is a test string"
+msgstr "Это тестовая строка"
+
+#: monitoringapp/templates/login.html:4 monitoringapp/templates/login.html:7
 msgid "Авторизация"
 msgstr "Login"
 
@@ -98,7 +104,9 @@ msgid "Требуется авторизация"
 msgstr "Authorization Required"
 
 #: monitoringapp/templates/login_required.html:8
-msgid "Данный раздел доступен только авторизованным пользователям. Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
+msgid ""
+"Данный раздел доступен только авторизованным пользователям. "
+"Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
 msgstr "This section is only available to authorized users. Please sign up and/or log in to view this page."
 
 #: monitoringapp/templates/login_required.html:10
@@ -136,10 +144,6 @@ msgstr "Already have an account?"
 msgid "Войдите"
 msgstr "Login"
 
-#: monitoringapp/templates/start_page.html:4
-msgid "Главная страница"
-msgstr "Home Page"
-
 #: monitoringapp/templates/start_page.html:7
 msgid "Мониторинг цен на продукты питания"
 msgstr "Food Price Monitoring"
@@ -147,4 +151,3 @@ msgstr "Food Price Monitoring"
 #: monitoringapp/templates/statistics.html:7
 msgid "Страница для вывода статистики"
 msgstr "Statistics Page"
-

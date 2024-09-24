@@ -337,15 +337,16 @@
                     <a href="{% url 'login' %}">{% trans "Войти" %}</a>
                 {% endif %}
             </div>
-            <form action="{% url 'set_language' %}" method="post" style="margin-left: 20px;">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ request.path }}">
-        <select name="language" onchange="this.form.submit()" style="padding: 5px; font-size: 16px;">
-            <option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
-            <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-            <option value="kk" {% if LANGUAGE_CODE == 'kk' %}selected{% endif %}>Қазақша</option>
-        </select>
-    </form>
+           <form action="{% url 'set_language' %}" method="post" style="margin-left: 20px;">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}">
+                    <select name="language" onchange="this.form.submit()" style="padding: 5px; font-size: 16px;">
+                        <option value="ru" {% if request.LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+                        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                        <option value="kk" {% if request.LANGUAGE_CODE == 'kk' %}selected{% endif %}>Қазақша</option>
+                    </select>
+            </form>
+
 
 
 
@@ -354,8 +355,16 @@
         <div class="content">
             {% block content %}
             <!-- Контент страниц -->
+
+
             {% endblock %}
         </div>
+        <p><h1>Текущий язык: {{ request.LANGUAGE_CODE }}</h1></p>
+
+<p>{% trans "Это тестовая строка для перевода" %}</p>
+
+<p>{% trans "This is a test string" %}</p>
+
     </div>
 </body>
 </html>

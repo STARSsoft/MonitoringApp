@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .forms import UserProfileForm
-
+from django.utils.translation import gettext as _
 
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
@@ -87,12 +87,17 @@ def profile_view(request):
 
 
 
+def start_page(request):
+    translated_text = _("Главная страница")
+    return render(request, 'start_page.html', {'translated_text': translated_text})
+
+
 
 
 # Остальные представления
 
-def start_page(request):
-    return render(request, 'start_page.html')
+# def start_page(request):
+#     return render(request, 'start_page.html')
 
 def statistics(request):
     return render(request, 'statistics.html')
