@@ -151,3 +151,21 @@ msgstr "Азық-түлік бағаларын бақылау"
 #: monitoringapp/templates/statistics.html:7
 msgid "Страница для вывода статистики"
 msgstr "Статистика шығару беті"
+
+msgid "Email address"
+msgstr "Электрондық пошта мекенжайы"
+
+msgid "Enter the same password as before, for verification."
+msgstr "Растау үшін құпиясөзді қайта енгізіңіз."
+
+msgid "Your password can't be too similar to your other personal information."
+msgstr "Сіздің құпия сөзіңіз жеке ақпаратыңызға тым ұқсас болмауы керек."
+
+msgid "Your password must contain at least 8 characters."
+msgstr "Құпия сөзіңіз кем дегенде 8 таңбадан тұруы керек."
+
+msgid "Your password can't be a commonly used password."
+msgstr "Құпия сөзіңіз өте жиі қолданылатын құпия сөз болмауы керек."
+
+msgid "Your password can't be entirely numeric."
+msgstr "Құпия сөзіңіз тек сандардан тұрмауы керек."

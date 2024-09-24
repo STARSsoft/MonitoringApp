@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from .forms import UserProfileForm
 from django.utils.translation import gettext as _
+from django.contrib.auth import update_session_auth_hash
+from .forms import UserProfileForm, CustomPasswordChangeForm  # Импортируйте вашу кастомную форму
 
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
@@ -58,6 +59,8 @@ def login_view(request):
     return render(request, 'login.html')
 
 
+
+
 @login_required
 def profile_view(request):
     # Обработка формы редактирования профиля
@@ -70,7 +73,7 @@ def profile_view(request):
 
         # Обработка формы смены пароля
         elif 'change_password' in request.POST:
-            password_form = PasswordChangeForm(request.user, request.POST)
+            password_form = CustomPasswordChangeForm(request.user, request.POST)  # Используем кастомную форму
             if password_form.is_valid():
                 user = password_form.save()  # Сохраняем новый пароль
                 update_session_auth_hash(request, user)  # Обновляем сессию, чтобы не разлогинило
@@ -78,7 +81,7 @@ def profile_view(request):
 
     else:
         profile_form = UserProfileForm(instance=request.user)
-        password_form = PasswordChangeForm(request.user)
+        password_form = CustomPasswordChangeForm(request.user)  # Используем кастомную форму
 
     return render(request, 'profile.html', {
         'profile_form': profile_form,
@@ -96,8 +99,6 @@ def start_page(request):
 
 # Остальные представления
 
-# def start_page(request):
-#     return render(request, 'start_page.html')
 
 def statistics(request):
     return render(request, 'statistics.html')

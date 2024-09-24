@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonitoringApp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 08:55+0500\n"
+"POT-Creation-Date: 2024-09-24 18:24+0500\n"
 "PO-Revision-Date: 2024-09-24 08:55+0500\n"
 "Last-Translator: Your Name <your.email@example.com>\n"
 "Language-Team: English <en@li.org>\n"
@@ -12,7 +12,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: monitoringapp/core/views.py:91 monitoringapp/templates/start_page.html:4
+#: monitoringapp/core/forms.py:32
+msgid "Email address"
+msgstr ""
+
+#: monitoringapp/core/forms.py:44
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Новый пароль"
+msgstr "Change Password"
+
+#: monitoringapp/core/forms.py:51
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Подтвердите новый пароль"
+msgstr "Change Password"
+
+#: monitoringapp/core/views.py:94 monitoringapp/templates/start_page.html:4
 msgid "Главная страница"
 msgstr "Home Page"
 
@@ -57,7 +73,8 @@ msgstr "Add Prices"
 msgid "Статистика"
 msgstr "Statistics"
 
-#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:7
+#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:4
+#: monitoringapp/templates/profile.html:7
 msgid "Профиль"
 msgstr "Profile"
 
@@ -69,14 +86,6 @@ msgstr "Logout"
 #: monitoringapp/templates/login_required.html:10
 msgid "Войти"
 msgstr "Login"
-
-#: monitoringapp/templates/base.html:364
-msgid "Это тестовая строка для перевода"
-msgstr "This is a test string for translation"
-
-#: monitoringapp/templates/base.html:366
-msgid "This is a test string"
-msgstr "Это тестовая строка"
 
 #: monitoringapp/templates/login.html:4 monitoringapp/templates/login.html:7
 msgid "Авторизация"
@@ -107,7 +116,9 @@ msgstr "Authorization Required"
 msgid ""
 "Данный раздел доступен только авторизованным пользователям. "
 "Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
-msgstr "This section is only available to authorized users. Please sign up and/or log in to view this page."
+msgstr ""
+"This section is only available to authorized users. Please sign up and/or "
+"log in to view this page."
 
 #: monitoringapp/templates/login_required.html:10
 msgid "или"
@@ -127,9 +138,25 @@ msgid "Сохранить изменения"
 msgstr "Save Changes"
 
 #: monitoringapp/templates/profile.html:17
-#: monitoringapp/templates/profile.html:21
+#: monitoringapp/templates/profile.html:30
 msgid "Изменить пароль"
 msgstr "Change Password"
+
+#: monitoringapp/templates/profile.html:24
+msgid "Пароль должен содержать как минимум 8 символов"
+msgstr "Your password must contain at least 8 characters"
+
+#: monitoringapp/templates/profile.html:25
+msgid "Пароль не может состоять только из цифр"
+msgstr "Your password can't be entirely numeric"
+
+#: monitoringapp/templates/profile.html:26
+msgid "Пароль не должен быть слишком простым и распространенным"
+msgstr "Your password can't be a commonly used password"
+
+#: monitoringapp/templates/profile.html:27
+msgid "Пароль не должен быть слишком похож на вашу личную информацию"
+msgstr "Your password can't be too similar to your other personal information"
 
 #: monitoringapp/templates/register.html:4
 #: monitoringapp/templates/register.html:7
@@ -151,3 +178,9 @@ msgstr "Food Price Monitoring"
 #: monitoringapp/templates/statistics.html:7
 msgid "Страница для вывода статистики"
 msgstr "Statistics Page"
+
+#~ msgid "Это тестовая строка для перевода"
+#~ msgstr "This is a test string for translation"
+
+#~ msgid "This is a test string"
+#~ msgstr "Это тестовая строка"

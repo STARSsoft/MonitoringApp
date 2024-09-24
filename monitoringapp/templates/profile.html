@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% endblock %}
+{% block title %}{% trans "Профиль" %}{% endblock %}
 
 {% block content %}
     <h1>{% trans "Профиль" %}</h1>
@@ -16,8 +16,19 @@
     <!-- Форма для смены пароля -->
     <h2>{% trans "Изменить пароль" %}</h2>
     <form method="POST" class="password-form">
-        {% csrf_token %}
-        {{ password_form.as_p }}
-        <button type="submit" name="change_password" class="save-button">{% trans "Изменить пароль" %}</button>
-    </form>
+    {% csrf_token %}
+    {{ password_form.as_p }}
+
+    <!-- Ваши собственные подсказки -->
+    <ul>
+        <li>{% trans "Пароль должен содержать как минимум 8 символов" %}</li>
+        <li>{% trans "Пароль не может состоять только из цифр" %}</li>
+        <li>{% trans "Пароль не должен быть слишком простым и распространенным" %}</li>
+        <li>{% trans "Пароль не должен быть слишком похож на вашу личную информацию" %}</li>
+    </ul>
+
+    <button type="submit" class="save-button">{% trans "Изменить пароль" %}</button>
+</form>
+
+
 {% endblock %}

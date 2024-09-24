@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonitoringApp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 08:55+0500\n"
+"POT-Creation-Date: 2024-09-24 18:24+0500\n"
 "PO-Revision-Date: 2024-09-24 08:55+0500\n"
 "Last-Translator: Your Name <your.email@example.com>\n"
 "Language-Team: Kazakh <kk@li.org>\n"
@@ -12,7 +12,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: monitoringapp/core/views.py:91 monitoringapp/templates/start_page.html:4
+#: monitoringapp/core/forms.py:32
+msgid "Email address"
+msgstr "Электрондық пошта мекенжайы"
+
+#: monitoringapp/core/forms.py:44
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Новый пароль"
+msgstr "Құпия сөзді өзгерту"
+
+#: monitoringapp/core/forms.py:51
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Подтвердите новый пароль"
+msgstr "Құпия сөзді өзгерту"
+
+#: monitoringapp/core/views.py:94 monitoringapp/templates/start_page.html:4
 msgid "Главная страница"
 msgstr "Басты бет"
 
@@ -57,7 +73,8 @@ msgstr "Бағаларды қосу"
 msgid "Статистика"
 msgstr "Статистика"
 
-#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:7
+#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:4
+#: monitoringapp/templates/profile.html:7
 msgid "Профиль"
 msgstr "Профиль"
 
@@ -69,14 +86,6 @@ msgstr "Шығу"
 #: monitoringapp/templates/login_required.html:10
 msgid "Войти"
 msgstr "Кіру"
-
-#: monitoringapp/templates/base.html:364
-msgid "Это тестовая строка для перевода"
-msgstr "Бұл аудару үшін тест жолы"
-
-#: monitoringapp/templates/base.html:366
-msgid "This is a test string"
-msgstr "Бұл тест жолы"
 
 #: monitoringapp/templates/login.html:4 monitoringapp/templates/login.html:7
 msgid "Авторизация"
@@ -107,7 +116,9 @@ msgstr "Авторизация қажет"
 msgid ""
 "Данный раздел доступен только авторизованным пользователям. "
 "Зарегистрируйтесь и/или войдите на сайт, чтобы просматривать эту страницу."
-msgstr "Бұл бөлім тек авторизацияланған пайдаланушылар үшін қол жетімді. Көру үшін тіркеліңіз немесе кіріңіз."
+msgstr ""
+"Бұл бөлім тек авторизацияланған пайдаланушылар үшін қол жетімді. Көру үшін "
+"тіркеліңіз немесе кіріңіз."
 
 #: monitoringapp/templates/login_required.html:10
 msgid "или"
@@ -127,9 +138,25 @@ msgid "Сохранить изменения"
 msgstr "Өзгерістерді сақтау"
 
 #: monitoringapp/templates/profile.html:17
-#: monitoringapp/templates/profile.html:21
+#: monitoringapp/templates/profile.html:30
 msgid "Изменить пароль"
 msgstr "Құпия сөзді өзгерту"
+
+#: monitoringapp/templates/profile.html:24
+msgid "Пароль должен содержать как минимум 8 символов"
+msgstr "Құпия сөзіңіз кем дегенде 8 таңбадан тұруы керек."
+
+#: monitoringapp/templates/profile.html:25
+msgid "Пароль не может состоять только из цифр"
+msgstr "Құпия сөзіңіз тек сандардан тұрмауы керек."
+
+#: monitoringapp/templates/profile.html:26
+msgid "Пароль не должен быть слишком простым и распространенным"
+msgstr "Құпия сөзіңіз өте жиі қолданылатын құпия сөз болмауы керек."
+
+#: monitoringapp/templates/profile.html:27
+msgid "Пароль не должен быть слишком похож на вашу личную информацию"
+msgstr "Сіздің құпия сөзіңіз жеке ақпаратыңызға тым ұқсас болмауы керек."
 
 #: monitoringapp/templates/register.html:4
 #: monitoringapp/templates/register.html:7
@@ -151,3 +178,26 @@ msgstr "Азық-түлік бағаларын бақылау"
 #: monitoringapp/templates/statistics.html:7
 msgid "Страница для вывода статистики"
 msgstr "Статистика шығару беті"
+
+#~ msgid "Адрес электронной почты"
+#~ msgstr "Электрондық поштаның адресі"
+
+#~ msgid "Enter the same password as before, for verification."
+#~ msgstr "Растау үшін құпиясөзді қайта енгізіңіз."
+
+#~ msgid ""
+#~ "Your password can't be too similar to your other personal information."
+#~ msgstr "Сіздің құпия сөзіңіз жеке ақпаратыңызға тым ұқсас болмауы керек."
+
+#~ msgid "Your password must contain at least 8 characters."
+#~ msgstr "Құпия сөзіңіз кем дегенде 8 таңбадан тұруы керек."
+
+#~ msgid "Your password can't be a commonly used password."
+#~ msgstr "Құпия сөзіңіз өте жиі қолданылатын құпия сөз болмауы керек."
+
+#~ msgid "Your password can't be entirely numeric."
+#~ msgstr "Құпия сөзіңіз тек сандардан тұрмауы керек."
+
+#
+#~ msgid "Для подтверждения введите, пожалуйста, пароль ещё раз."
+#~ msgstr "Растау үшін құпиясөзді қайта енгізіңіз."

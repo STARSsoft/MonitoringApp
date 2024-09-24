@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonitoringApp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 08:55+0500\n"
+"POT-Creation-Date: 2024-09-24 18:24+0500\n"
 "PO-Revision-Date: 2024-09-24 08:55+0500\n"
 "Last-Translator: Your Name <your.email@example.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -14,7 +14,23 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: monitoringapp/core/views.py:91 monitoringapp/templates/start_page.html:4
+#: monitoringapp/core/forms.py:32
+msgid "Email address"
+msgstr ""
+
+#: monitoringapp/core/forms.py:44
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Новый пароль"
+msgstr "Изменить пароль"
+
+#: monitoringapp/core/forms.py:51
+#, fuzzy
+#| msgid "Изменить пароль"
+msgid "Подтвердите новый пароль"
+msgstr "Изменить пароль"
+
+#: monitoringapp/core/views.py:94 monitoringapp/templates/start_page.html:4
 msgid "Главная страница"
 msgstr "Главная страница"
 
@@ -59,7 +75,7 @@ msgstr "Добавить цены"
 msgid "Статистика"
 msgstr "Статистика"
 
-#: monitoringapp/templates/base.html:330
+#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:4
 #: monitoringapp/templates/profile.html:7
 msgid "Профиль"
 msgstr "Профиль"
@@ -68,22 +84,12 @@ msgstr "Профиль"
 msgid "Выйти"
 msgstr "Выйти"
 
-#: monitoringapp/templates/base.html:337
-#: monitoringapp/templates/login.html:24
+#: monitoringapp/templates/base.html:337 monitoringapp/templates/login.html:24
 #: monitoringapp/templates/login_required.html:10
 msgid "Войти"
 msgstr "Войти"
 
-#: monitoringapp/templates/base.html:364
-msgid "Это тестовая строка для перевода"
-msgstr "Это тестовая строка для перевода"
-
-#: monitoringapp/templates/base.html:366
-msgid "This is a test string"
-msgstr "Это тестовая строка"
-
-#: monitoringapp/templates/login.html:4
-#: monitoringapp/templates/login.html:7
+#: monitoringapp/templates/login.html:4 monitoringapp/templates/login.html:7
 msgid "Авторизация"
 msgstr "Авторизация"
 
@@ -134,9 +140,25 @@ msgid "Сохранить изменения"
 msgstr "Сохранить изменения"
 
 #: monitoringapp/templates/profile.html:17
-#: monitoringapp/templates/profile.html:21
+#: monitoringapp/templates/profile.html:30
 msgid "Изменить пароль"
 msgstr "Изменить пароль"
+
+#: monitoringapp/templates/profile.html:24
+msgid "Пароль должен содержать как минимум 8 символов"
+msgstr "Пароль должен содержать как минимум 8 символов"
+
+#: monitoringapp/templates/profile.html:25
+msgid "Пароль не может состоять только из цифр"
+msgstr "Пароль не может состоять только из цифр"
+
+#: monitoringapp/templates/profile.html:26
+msgid "Пароль не должен быть слишком простым и распространенным"
+msgstr "Пароль не должен быть слишком простым и распространенным"
+
+#: monitoringapp/templates/profile.html:27
+msgid "Пароль не должен быть слишком похож на вашу личную информацию"
+msgstr "Пароль не должен быть слишком похож на вашу личную информацию"
 
 #: monitoringapp/templates/register.html:4
 #: monitoringapp/templates/register.html:7
@@ -158,3 +180,9 @@ msgstr "Мониторинг цен на продукты питания"
 #: monitoringapp/templates/statistics.html:7
 msgid "Страница для вывода статистики"
 msgstr "Страница для вывода статистики"
+
+#~ msgid "Это тестовая строка для перевода"
+#~ msgstr "Это тестовая строка для перевода"
+
+#~ msgid "This is a test string"
+#~ msgstr "Это тестовая строка"

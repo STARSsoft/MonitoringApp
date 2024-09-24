@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 
 class UserRegistrationForm(forms.ModelForm):    # Форма регистрации пользователя
@@ -26,6 +29,7 @@ class UserRegistrationForm(forms.ModelForm):    # Форма регистрац�
 
 
 class UserProfileForm(forms.ModelForm): # Форма личного кабинета пользователя
+    email = forms.EmailField(label=_("Email address"))
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
@@ -33,3 +37,20 @@ class UserProfileForm(forms.ModelForm): # Форма личного кабине
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.fields['email'].required = True  # Email обязательно для заполнения
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    new_password1 = forms.CharField(
+        label=_("Новый пароль"),
+        widget=forms.PasswordInput,
+        strip=False,
+        help_text=None  # Убираем подсказки по умолчанию
+    )
+
+    new_password2 = forms.CharField(
+        label=_("Подтвердите новый пароль"),
+        widget=forms.PasswordInput,
+        strip=False,
+        help_text=None  # Убираем подсказки по умолчанию
+    )
+
