@@ -8,8 +8,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.utils.translation import gettext as _
-from django.contrib.auth import update_session_auth_hash
-from .forms import UserProfileForm, CustomPasswordChangeForm  # Импортируйте вашу кастомную форму
+from django.utils import timezone  # Добавляем импорт timezone
+from .forms import UserProfileForm, CustomPasswordChangeForm  # Импортируем кастомные формы
 from .forms import PriceForm
 from django.contrib.auth.decorators import login_required
 
