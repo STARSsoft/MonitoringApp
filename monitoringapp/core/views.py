@@ -13,6 +13,9 @@ from .forms import UserProfileForm, CustomPasswordChangeForm  # Импортир
 from .forms import PriceForm
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal  # Импортируем Decimal для работы с числами
+from django.http import JsonResponse
+from .models import Product, Region, UnitOfMeasurement  # Добавьте Product к списку импортов
+
 
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
@@ -99,22 +102,6 @@ def start_page(request):
     translated_text = _("Главная страница")
     return render(request, 'start_page.html', {'translated_text': translated_text})
 
-# @login_required
-# def add_price(request):
-#     language = request.LANGUAGE_CODE  # Получаем текущий язык
-#     if request.method == 'POST':
-#         form = PriceForm(request.POST, language=language)
-#         if form.is_valid():
-#             price = form.save(commit=False)
-#             price.username = request.user
-#             price.date = timezone.now()
-#             price.save()
-#             return redirect('price_add')
-#     else:
-#         form = PriceForm(language=language)
-#
-#     return render(request, 'price_add.html', {'form': form})
-
 
 @login_required
 def add_price(request):
@@ -189,3 +176,60 @@ def about_us(request):
 
 def thanks(request):
     return render(request, 'thanks.html')
+
+
+
+@login_required
+def get_measurements(request, product_id):
+    try:
+        # Получаем выбранный продукт по его ID
+        product = Product.objects.get(pk=product_id)
+
+        # Определяем текущий язык
+        language = request.LANGUAGE_CODE
+
+        # Функция для получения наименования единицы измерения в зависимости от языка
+        def get_measurement_name(unit, lang):
+            if lang == 'kk':
+                return unit.name_unit_KZ
+            elif lang == 'en':
+                return unit.name_unit_EN
+            return unit.name_unit_RU  # По умолчанию русский
+
+        # Список доступных единиц измерения
+        available_measures = []
+
+        if product.measure_1:
+            unit = UnitOfMeasurement.objects.get(pk=1)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+        if product.measure_2:
+            unit = UnitOfMeasurement.objects.get(pk=2)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+        if product.measure_3:
+            unit = UnitOfMeasurement.objects.get(pk=3)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+        if product.measure_4:
+            unit = UnitOfMeasurement.objects.get(pk=4)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+        if product.measure_5:
+            unit = UnitOfMeasurement.objects.get(pk=5)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+        if product.measure_6:
+            unit = UnitOfMeasurement.objects.get(pk=6)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+        if product.measure_7:
+            unit = UnitOfMeasurement.objects.get(pk=7)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+        if product.measure_8:
+            unit = UnitOfMeasurement.objects.get(pk=8)
+            available_measures.append({'id': unit.ID_unit, 'name': get_measurement_name(unit, language)})
+
+        # Устанавливаем единицу измерения по умолчанию
+        default_measure = product.measure_default
+
+        return JsonResponse({
+            'measures': available_measures,
+            'default_measure': default_measure
+        })
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)

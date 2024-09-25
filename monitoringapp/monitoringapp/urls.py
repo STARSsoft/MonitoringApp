@@ -6,6 +6,8 @@ from django.conf.urls.i18n import i18n_patterns
 from core import views
 from django.contrib.auth import views as auth_views
 from django.conf.urls.i18n import set_language
+from django.urls import path
+
 
 # Подключаем URL для смены языка через стандартный обработчик
 urlpatterns = [
@@ -27,4 +29,5 @@ urlpatterns += i18n_patterns(
     path('priceadd-list/', views.price_add_list, name='price_add_list'),
     path('set-language/', set_language, name='set_language'),
     path('thanks/', views.thanks, name='thanks'),
+    path('get-measurements/<int:product_id>/', views.get_measurements, name='get_measurements'),
 )

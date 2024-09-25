@@ -78,22 +78,18 @@ class PriceForm(forms.ModelForm):
         if language == 'kk':
             self.fields['ID_product'].queryset = Product.objects.all()
             self.fields['ID_product'].label_from_instance = lambda obj: obj.product_KZ
-            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
-            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_KZ
             self.fields['ID_region'].queryset = Region.objects.all()
             self.fields['ID_region'].label_from_instance = lambda obj: obj.region_KZ
         elif language == 'en':
             self.fields['ID_product'].queryset = Product.objects.all()
             self.fields['ID_product'].label_from_instance = lambda obj: obj.product_EN
-            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
-            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_EN
             self.fields['ID_region'].queryset = Region.objects.all()
             self.fields['ID_region'].label_from_instance = lambda obj: obj.region_EN
         else:
             self.fields['ID_product'].queryset = Product.objects.all()
             self.fields['ID_product'].label_from_instance = lambda obj: obj.product_RU
-            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
-            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_RU
             self.fields['ID_region'].queryset = Region.objects.all()
             self.fields['ID_region'].label_from_instance = lambda obj: obj.region_RU
 
+        # Изначально оставляем поле с единицей измерения пустым, так как оно будет загружаться динамически
+        self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.none()

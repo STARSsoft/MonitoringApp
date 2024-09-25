@@ -1,16 +1,51 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Добавить цены" %}{% endblock %}
-
 {% block content %}
-    <h1>{% trans "Добавить цены" %}</h1>
-    <form method="POST" class="styled-form">  <!-- Добавляем класс для стилей -->
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
-    </form>
+  <h1>{% trans "Добавить цены" %}</h1>
 
-    <br/>
-   <h2> <a href="{% url 'price_add_list' %}">{% trans "Внести цены списком" %}</a></h2>
+  <form method="POST" id="price-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const productSelect = document.querySelector('#id_ID_product');
+      const measureSelect = document.querySelector('#id_ID_measure');
+
+      // Функция для обновления выпадающего списка единиц измерения
+      function updateMeasurements(measures, defaultMeasure) {
+        // Очищаем текущий список единиц измерения
+        measureSelect.innerHTML = '';
+
+        // Заполняем выпадающий список новыми значениями
+        measures.forEach(measure => {
+          const option = document.createElement('option');
+          option.value = measure.id;
+          option.textContent = measure.name;
+          if (measure.id === defaultMeasure) {
+            option.selected = true;
+          }
+          measureSelect.appendChild(option);
+        });
+      }
+
+      // При изменении выбора продукта выполняем запрос на сервер
+      productSelect.addEventListener('change', function() {
+        const productId = this.value;
+        const url = `{% url 'get_measurements' 0 %}`.replace('0', productId);
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            if (data.measures) {
+              updateMeasurements(data.measures, data.default_measure);
+            }
+          })
+          .catch(error => console.error('Error fetching measurements:', error));
+      });
+    });
+  </script>
 {% endblock %}
