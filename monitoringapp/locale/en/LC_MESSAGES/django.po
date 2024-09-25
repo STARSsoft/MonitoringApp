@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonitoringApp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 18:24+0500\n"
+"POT-Creation-Date: 2024-09-25 12:04+0500\n"
 "PO-Revision-Date: 2024-09-24 08:55+0500\n"
 "Last-Translator: Your Name <your.email@example.com>\n"
 "Language-Team: English <en@li.org>\n"
@@ -12,19 +12,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: monitoringapp/core/forms.py:32
+#: monitoringapp/core/forms.py:34
 msgid "Email address"
 msgstr "Email address"
 
-#: monitoringapp/core/forms.py:44
+#: monitoringapp/core/forms.py:46
 msgid "Новый пароль"
 msgstr "New Password"
 
-#: monitoringapp/core/forms.py:51
+#: monitoringapp/core/forms.py:53
 msgid "Подтвердите новый пароль"
 msgstr "Confirm new Password"
 
-#: monitoringapp/core/views.py:94 monitoringapp/templates/start_page.html:4
+#: monitoringapp/core/forms.py:66
+msgid "Регион"
+msgstr "Region"
+
+#: monitoringapp/core/forms.py:67
+#: monitoringapp/templates/price_add_list.html:16
+msgid "Продукт"
+msgstr "Product"
+
+#: monitoringapp/core/forms.py:68
+#: monitoringapp/templates/price_add_list.html:17
+msgid "Единица измерения"
+msgstr "Unit of measurement"
+
+#: monitoringapp/core/forms.py:69
+#: monitoringapp/templates/price_add_list.html:18
+msgid "Количество"
+msgstr "Quantity"
+
+#: monitoringapp/core/forms.py:70
+#: monitoringapp/templates/price_add_list.html:19
+msgid "Цена"
+msgstr "Price"
+
+#: monitoringapp/core/views.py:98 monitoringapp/templates/start_page.html:4
 msgid "Главная страница"
 msgstr "Home Page"
 
@@ -42,7 +66,7 @@ msgstr "Kazakh"
 
 #: monitoringapp/templates/about_us.html:4
 #: monitoringapp/templates/about_us.html:14
-#: monitoringapp/templates/base.html:318
+#: monitoringapp/templates/base.html:370
 msgid "О нас"
 msgstr "About Us"
 
@@ -55,30 +79,31 @@ msgstr "Page with information about us"
 msgid "Мониторинг цен"
 msgstr "Price Monitoring"
 
-#: monitoringapp/templates/base.html:315
+#: monitoringapp/templates/base.html:367
 msgid "Главная"
 msgstr "Home"
 
-#: monitoringapp/templates/base.html:316
+#: monitoringapp/templates/base.html:368
 #: monitoringapp/templates/price_add.html:4
+#: monitoringapp/templates/price_add.html:7
 msgid "Добавить цены"
 msgstr "Add Prices"
 
-#: monitoringapp/templates/base.html:317
+#: monitoringapp/templates/base.html:369
 #: monitoringapp/templates/statistics.html:4
 msgid "Статистика"
 msgstr "Statistics"
 
-#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:4
+#: monitoringapp/templates/base.html:382 monitoringapp/templates/profile.html:4
 #: monitoringapp/templates/profile.html:7
 msgid "Профиль"
 msgstr "Profile"
 
-#: monitoringapp/templates/base.html:333
+#: monitoringapp/templates/base.html:385
 msgid "Выйти"
 msgstr "Logout"
 
-#: monitoringapp/templates/base.html:337 monitoringapp/templates/login.html:24
+#: monitoringapp/templates/base.html:389 monitoringapp/templates/login.html:24
 #: monitoringapp/templates/login_required.html:10
 msgid "Войти"
 msgstr "Login"
@@ -125,9 +150,16 @@ msgstr "or"
 msgid "Зарегистрироваться"
 msgstr "Sign Up"
 
-#: monitoringapp/templates/price_add.html:7
-msgid "Страница добавления цен"
-msgstr "Page for adding prices"
+#: monitoringapp/templates/price_add.html:11
+#: monitoringapp/templates/price_add_list.html:34
+msgid "Сохранить"
+msgstr "Save"
+
+#: monitoringapp/templates/price_add.html:15
+#: monitoringapp/templates/price_add_list.html:4
+#: monitoringapp/templates/price_add_list.html:7
+msgid "Внести цены списком"
+msgstr "Enter prices as a list"
 
 #: monitoringapp/templates/profile.html:13
 msgid "Сохранить изменения"
@@ -175,9 +207,11 @@ msgstr "Food Price Monitoring"
 msgid "Страница для вывода статистики"
 msgstr "Statistics Page"
 
+#~ msgid "Страница добавления цен"
+#~ msgstr "Page for adding prices"
+
 #~ msgid "Это тестовая строка для перевода"
 #~ msgstr "This is a test string for translation"
 
 #~ msgid "This is a test string"
 #~ msgstr "Это тестовая строка"
-

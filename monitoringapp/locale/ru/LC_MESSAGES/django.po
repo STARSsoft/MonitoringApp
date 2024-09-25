@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonitoringApp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 18:24+0500\n"
+"POT-Creation-Date: 2024-09-25 12:04+0500\n"
 "PO-Revision-Date: 2024-09-24 08:55+0500\n"
 "Last-Translator: Your Name <your.email@example.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -14,19 +14,43 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: monitoringapp/core/forms.py:32
+#: monitoringapp/core/forms.py:34
 msgid "Email address"
 msgstr "Электронный адрес"
 
-#: monitoringapp/core/forms.py:44
+#: monitoringapp/core/forms.py:46
 msgid "Новый пароль"
 msgstr "Новый пароль"
 
-#: monitoringapp/core/forms.py:51
+#: monitoringapp/core/forms.py:53
 msgid "Подтвердите новый пароль"
 msgstr "Подтвердите новый пароль"
 
-#: monitoringapp/core/views.py:94 monitoringapp/templates/start_page.html:4
+#: monitoringapp/core/forms.py:66
+msgid "Регион"
+msgstr "Регион"
+
+#: monitoringapp/core/forms.py:67
+#: monitoringapp/templates/price_add_list.html:16
+msgid "Продукт"
+msgstr "Продукт"
+
+#: monitoringapp/core/forms.py:68
+#: monitoringapp/templates/price_add_list.html:17
+msgid "Единица измерения"
+msgstr "Единица измерения"
+
+#: monitoringapp/core/forms.py:69
+#: monitoringapp/templates/price_add_list.html:18
+msgid "Количество"
+msgstr "Количество"
+
+#: monitoringapp/core/forms.py:70
+#: monitoringapp/templates/price_add_list.html:19
+msgid "Цена"
+msgstr "Цена"
+
+#: monitoringapp/core/views.py:98 monitoringapp/templates/start_page.html:4
 msgid "Главная страница"
 msgstr "Главная страница"
 
@@ -44,7 +68,7 @@ msgstr "Казахский"
 
 #: monitoringapp/templates/about_us.html:4
 #: monitoringapp/templates/about_us.html:14
-#: monitoringapp/templates/base.html:318
+#: monitoringapp/templates/base.html:370
 msgid "О нас"
 msgstr "О нас"
 
@@ -57,30 +81,31 @@ msgstr "Страница с информацией о нас"
 msgid "Мониторинг цен"
 msgstr "Мониторинг цен"
 
-#: monitoringapp/templates/base.html:315
+#: monitoringapp/templates/base.html:367
 msgid "Главная"
 msgstr "Главная"
 
-#: monitoringapp/templates/base.html:316
+#: monitoringapp/templates/base.html:368
 #: monitoringapp/templates/price_add.html:4
+#: monitoringapp/templates/price_add.html:7
 msgid "Добавить цены"
 msgstr "Добавить цены"
 
-#: monitoringapp/templates/base.html:317
+#: monitoringapp/templates/base.html:369
 #: monitoringapp/templates/statistics.html:4
 msgid "Статистика"
 msgstr "Статистика"
 
-#: monitoringapp/templates/base.html:330 monitoringapp/templates/profile.html:4
+#: monitoringapp/templates/base.html:382 monitoringapp/templates/profile.html:4
 #: monitoringapp/templates/profile.html:7
 msgid "Профиль"
 msgstr "Профиль"
 
-#: monitoringapp/templates/base.html:333
+#: monitoringapp/templates/base.html:385
 msgid "Выйти"
 msgstr "Выйти"
 
-#: monitoringapp/templates/base.html:337 monitoringapp/templates/login.html:24
+#: monitoringapp/templates/base.html:389 monitoringapp/templates/login.html:24
 #: monitoringapp/templates/login_required.html:10
 msgid "Войти"
 msgstr "Войти"
@@ -127,9 +152,16 @@ msgstr "или"
 msgid "Зарегистрироваться"
 msgstr "Зарегистрироваться"
 
-#: monitoringapp/templates/price_add.html:7
-msgid "Страница добавления цен"
-msgstr "Страница добавления цен"
+#: monitoringapp/templates/price_add.html:11
+#: monitoringapp/templates/price_add_list.html:34
+msgid "Сохранить"
+msgstr "Сохранить"
+
+#: monitoringapp/templates/price_add.html:15
+#: monitoringapp/templates/price_add_list.html:4
+#: monitoringapp/templates/price_add_list.html:7
+msgid "Внести цены списком"
+msgstr "Внести цены списком"
 
 #: monitoringapp/templates/profile.html:13
 msgid "Сохранить изменения"
@@ -177,9 +209,11 @@ msgstr "Мониторинг цен на продукты питания"
 msgid "Страница для вывода статистики"
 msgstr "Страница для вывода статистики"
 
+#~ msgid "Страница добавления цен"
+#~ msgstr "Страница добавления цен"
+
 #~ msgid "Это тестовая строка для перевода"
 #~ msgstr "Это тестовая строка для перевода"
 
 #~ msgid "This is a test string"
 #~ msgstr "Это тестовая строка"
-
