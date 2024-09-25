@@ -165,7 +165,7 @@ def add_price(request):
 
             # Сохраняем данные в БД
             price.save()
-            return redirect('price_add')  # Перенаправляем обратно на страницу после сохранения
+            return redirect('thanks')  # Отправляем на страницу благодарности
     else:
         form = PriceForm(language=language)
 
@@ -187,3 +187,5 @@ def statistics(request):
 def about_us(request):
     return render(request, 'about_us.html')
 
+def thanks(request):
+    return render(request, 'thanks.html')

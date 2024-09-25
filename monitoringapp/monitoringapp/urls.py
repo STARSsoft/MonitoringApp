@@ -26,4 +26,5 @@ urlpatterns += i18n_patterns(
     path('login-required/', views.login_required_view, name='login_required'),
     path('priceadd-list/', views.price_add_list, name='price_add_list'),
     path('set-language/', set_language, name='set_language'),
+    path('thanks/', views.thanks, name='thanks'),
 )

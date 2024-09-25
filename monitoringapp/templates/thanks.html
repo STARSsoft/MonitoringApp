@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Спасибо" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Спасибо!" %}</h1>
+    <p>{% trans "Выражаем Вам благодарность, за то что поддерживаете проект." %}</p>
+    <p>
+       Вы можете ещё <a href="{% url 'price_add' %}">{% trans "добавить цены" %}</a> {% trans "или" %}
+        {% trans "продолжить навигацию по сайту" %}
+    </p>
+{% endblock %}
