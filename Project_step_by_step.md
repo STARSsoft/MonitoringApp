@@ -1213,4 +1213,267 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 ```
-63. 
+63. Базовый функционал сайта настроен. По мере наполнения сайта контентом, необходимо будет проводить операции по локализации контента. 
+Теперь, наступила пора перейти к настройке главной части, то ради чего задумывался весь сайт.
+Для начала необходимо настроить форму внесения цен на продукты питания пользователями. Задумывается два варианта внесения цен: единичный и списком. 
+
+Настраиваем первый вариант внесения цен - единичный. Суть формы, когда пользователь выбирает только один товар, добавляет на него цену и отправляет в базу данных.
+Создаем форму шаблона:
+``` 
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Добавить цены" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Добавить цены" %}</h1>
+    <form method="POST" class="styled-form">  <!-- Добавляем класс для стилей -->
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
+    </form>
+
+    <br/>
+    <a href="{% url 'price_add_list' %}">{% trans "Внести цены списком" %}</a>
+{% endblock %}
+```
+64. Чтобы форма была выполнена в едином стиле с остальными формами сайт, добавляем в базовый шаблон настройки CSS стилей:
+``` 
+/* Стили для формы добавления цен */
+.styled-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.styled-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.styled-form input {
+    width: 97%;
+    padding: 5px;
+    margin-bottom: 7px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.styled-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 7px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.styled-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #add8e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.styled-form button:hover {
+    background-color: #3543de;
+}
+```
+65. Создаю модель формы в файле 'models.py'
+``` 
+# core/models.py
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+class Price(models.Model):
+    ID_product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Продукт
+    ID_region = models.ForeignKey('Region', on_delete=models.CASCADE)  # Регион
+    quantity = models.FloatField()  # Количество
+    ID_measure = models.ForeignKey('UnitOfMeasurement', on_delete=models.CASCADE)  # Единица измерения
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена
+    username = models.ForeignKey(User, on_delete=models.CASCADE)  # Пользователь
+    date = models.DateTimeField(default=timezone.now)  # Дата
+    years_norm = models.FloatField()  # Годовые нормы потребления
+    price_for_kg = models.DecimalField(max_digits=10, decimal_places=2)  # Цена за кг
+    price_for_year = models.DecimalField(max_digits=10, decimal_places=2)  # Цена за год
+    price_for_month = models.DecimalField(max_digits=10, decimal_places=2)  # Цена за месяц
+
+    class Meta:
+        db_table = 'mp_prices_all'  # Привязка к существующей таблице
+
+    def __str__(self):
+        return f"Цена для {self.ID_product} в {self.ID_region}"
+
+# Модель для продуктов
+class Product(models.Model):
+    ID_product = models.AutoField(primary_key=True)  # Явный первичный ключ
+    product_KZ = models.CharField(max_length=255)
+    product_RU = models.CharField(max_length=255)
+    product_EN = models.CharField(max_length=255)
+    measure_1 = models.BooleanField(default=False)  # Соответствует ID 1
+    measure_2 = models.BooleanField(default=False)  # Соответствует ID 2
+    measure_3 = models.BooleanField(default=False)  # И так далее...
+    measure_4 = models.BooleanField(default=False)
+    measure_5 = models.BooleanField(default=False)
+    measure_6 = models.BooleanField(default=False)
+    measure_7 = models.BooleanField(default=False)
+    measure_8 = models.BooleanField(default=False)
+    measure_default = models.PositiveIntegerField()  # Значение от 1 до 8
+    years_norm = models.FloatField()
+
+    class Meta:
+        db_table = 'mp_products'  # Привязка к существующей таблице
+
+    def __str__(self):
+        return self.product_RU  # Выводим название продукта на русском
+
+# Модель для регионов
+class Region(models.Model):
+    ID_region = models.AutoField(primary_key=True)  # Явный первичный ключ
+    region_KZ = models.CharField(max_length=255)
+    region_RU = models.CharField(max_length=255)
+    region_EN = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'mp_regions'  # Привязка к существующей таблице
+
+    def __str__(self):
+        return self.region_RU  # Выводим название региона на русском
+
+# Модель для единиц измерения
+class UnitOfMeasurement(models.Model):
+    ID_unit = models.AutoField(primary_key=True)  # Явный первичный ключ
+    name_unit_KZ = models.CharField(max_length=255)
+    name_unit_RU = models.CharField(max_length=255)
+    name_unit_EN = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'mp_unit_of_measurement'  # Привязка к существующей таблице
+
+    def __str__(self):
+        return self.name_unit_RU  # Выводим название единицы измерения на русском
+```
+Данная модель загружает в базу данных все внесенные данные из формы.
+66. Но прежде чем пользователь сможет заносить данные, нужно создать представление формы, где будут загружаться из базы данных наименование региона, продукта и единицы измерения.
+Файл 'views.py'
+``` 
+@login_required
+def add_price(request):
+    language = request.LANGUAGE_CODE  # Получаем текущий язык
+    if request.method == 'POST':
+        form = PriceForm(request.POST, language=language)
+        if form.is_valid():
+            price = form.save(commit=False)  # Не сохраняем сразу, чтобы добавить дополнительные данные
+
+            price.username = request.user  # Устанавливаем текущего пользователя
+            price.date = timezone.now()  # Устанавливаем текущую дату
+
+            # Явно получаем объект продукта
+            selected_product = form.cleaned_data.get('ID_product')
+            price.ID_product = selected_product  # Назначаем объект продукта
+            price.years_norm = selected_product.years_norm  # Присваиваем years_norm из продукта
+
+            # Получаем другие данные из формы
+            quantity = form.cleaned_data.get('quantity')
+            price_value = form.cleaned_data.get('price')
+            ID_measure = form.cleaned_data.get('ID_measure')
+
+            if quantity and price_value and ID_measure:
+                # Приводим количество к Decimal для совместимости
+                quantity = Decimal(quantity)
+
+                # Выполняем расчеты в зависимости от выбранной единицы измерения
+                if ID_measure.ID_unit == 1:  # Килограмм
+                    price.price_for_kg = price_value / quantity
+                elif ID_measure.ID_unit == 2:  # Грамм
+                    price.price_for_kg = price_value / (quantity / Decimal(1000))
+                elif ID_measure.ID_unit == 3:  # Штук
+                    price.price_for_kg = price_value / quantity
+                elif ID_measure.ID_unit == 4:  # Пучок
+                    price.price_for_kg = price_value / (quantity * Decimal(150) / Decimal(1000))
+                elif ID_measure.ID_unit == 5:  # Упаковка
+                    price.price_for_kg = price_value / (selected_product.years_norm * Decimal(1000))
+                elif ID_measure.ID_unit == 6:  # Булка
+                    price.price_for_kg = price_value / (quantity * Decimal(400) / Decimal(1000))
+                elif ID_measure.ID_unit == 7:  # Литр
+                    price.price_for_kg = price_value / quantity
+                elif ID_measure.ID_unit == 8:  # Бутылка
+                    price.price_for_kg = price_value / (quantity * Decimal(160) / Decimal(1000))
+
+                # Рассчитываем цену за год и за месяц
+                price.price_for_year = price.price_for_kg * Decimal(price.years_norm)
+                price.price_for_month = price.price_for_year / Decimal(12)
+
+            # Сохраняем данные в БД
+            price.save()
+            return redirect('price_add')  # Перенаправляем обратно на страницу после сохранения
+    else:
+        form = PriceForm(language=language)
+
+    return render(request, 'price_add.html', {'form': form})
+
+
+
+def price_add_list(request):
+    # Здесь логика для добавления цен списком
+    return render(request, 'price_add_list.html')  # Позже доработать шаблон price_add_list.html
+```
+Тут форма передает такие данные как имя пользователя, текущую дату. При этом при отправке данных в базу данных, проводим пересчет полученных данных в килограммы, с учетом годовых норм потребления продуктов получаем годовую цены на продукт, и в конце пересчитываем это на месячную норму.
+
+Функция 'price_add_list' пока как заглушка. К ней вернемся позже.  
+67. Ну и чтобы форма могла не только выбирать из базы данных в выпадающие списки наименование регионов, единиц измерения и наименования продуктов, создадим форму, которая будет подгружать необходимые данные на нужном языке в зависимости от выбранного языка.
+Вносим новые данные в файл 'forms.py'
+``` 
+from .models import Price, Product, Region, UnitOfMeasurement
+
+ class PriceForm(forms.ModelForm):
+    class Meta:
+        model = Price
+        fields = ['ID_region', 'ID_product', 'ID_measure', 'quantity', 'price']
+        labels = {
+            'ID_region': _('Регион'),
+            'ID_product': _('Продукт'),
+            'ID_measure': _('Единица измерения'),
+            'quantity': _('Количество'),
+            'price': _('Цена'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        language = kwargs.pop('language', 'ru')
+        super().__init__(*args, **kwargs)
+
+        # Динамическое обновление наименований полей в зависимости от языка
+        if language == 'kk':
+            self.fields['ID_product'].queryset = Product.objects.all()
+            self.fields['ID_product'].label_from_instance = lambda obj: obj.product_KZ
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
+            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_KZ
+            self.fields['ID_region'].queryset = Region.objects.all()
+            self.fields['ID_region'].label_from_instance = lambda obj: obj.region_KZ
+        elif language == 'en':
+            self.fields['ID_product'].queryset = Product.objects.all()
+            self.fields['ID_product'].label_from_instance = lambda obj: obj.product_EN
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
+            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_EN
+            self.fields['ID_region'].queryset = Region.objects.all()
+            self.fields['ID_region'].label_from_instance = lambda obj: obj.region_EN
+        else:
+            self.fields['ID_product'].queryset = Product.objects.all()
+            self.fields['ID_product'].label_from_instance = lambda obj: obj.product_RU
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
+            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_RU
+            self.fields['ID_region'].queryset = Region.objects.all()
+            self.fields['ID_region'].label_from_instance = lambda obj: obj.region_RU
+```
+68. 
