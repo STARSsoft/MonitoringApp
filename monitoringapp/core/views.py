@@ -12,6 +12,7 @@ from django.utils import timezone  # Добавляем импорт timezone
 from .forms import UserProfileForm, CustomPasswordChangeForm  # Импортируем кастомные формы
 from .forms import PriceForm
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal  # Импортируем Decimal для работы с числами
 
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
@@ -98,21 +99,78 @@ def start_page(request):
     translated_text = _("Главная страница")
     return render(request, 'start_page.html', {'translated_text': translated_text})
 
+# @login_required
+# def add_price(request):
+#     language = request.LANGUAGE_CODE  # Получаем текущий язык
+#     if request.method == 'POST':
+#         form = PriceForm(request.POST, language=language)
+#         if form.is_valid():
+#             price = form.save(commit=False)
+#             price.username = request.user
+#             price.date = timezone.now()
+#             price.save()
+#             return redirect('price_add')
+#     else:
+#         form = PriceForm(language=language)
+#
+#     return render(request, 'price_add.html', {'form': form})
+
+
 @login_required
 def add_price(request):
     language = request.LANGUAGE_CODE  # Получаем текущий язык
     if request.method == 'POST':
         form = PriceForm(request.POST, language=language)
         if form.is_valid():
-            price = form.save(commit=False)
-            price.username = request.user
-            price.date = timezone.now()
+            price = form.save(commit=False)  # Не сохраняем сразу, чтобы добавить дополнительные данные
+
+            price.username = request.user  # Устанавливаем текущего пользователя
+            price.date = timezone.now()  # Устанавливаем текущую дату
+
+            # Явно получаем объект продукта
+            selected_product = form.cleaned_data.get('ID_product')
+            price.ID_product = selected_product  # Назначаем объект продукта
+            price.years_norm = selected_product.years_norm  # Присваиваем years_norm из продукта
+
+            # Получаем другие данные из формы
+            quantity = form.cleaned_data.get('quantity')
+            price_value = form.cleaned_data.get('price')
+            ID_measure = form.cleaned_data.get('ID_measure')
+
+            if quantity and price_value and ID_measure:
+                # Приводим количество к Decimal для совместимости
+                quantity = Decimal(quantity)
+
+                # Выполняем расчеты в зависимости от выбранной единицы измерения
+                if ID_measure.ID_unit == 1:  # Килограмм
+                    price.price_for_kg = price_value / quantity
+                elif ID_measure.ID_unit == 2:  # Грамм
+                    price.price_for_kg = price_value / (quantity / Decimal(1000))
+                elif ID_measure.ID_unit == 3:  # Штук
+                    price.price_for_kg = price_value / quantity
+                elif ID_measure.ID_unit == 4:  # Пучок
+                    price.price_for_kg = price_value / (quantity * Decimal(150) / Decimal(1000))
+                elif ID_measure.ID_unit == 5:  # Упаковка
+                    price.price_for_kg = price_value / (selected_product.years_norm * Decimal(1000))
+                elif ID_measure.ID_unit == 6:  # Булка
+                    price.price_for_kg = price_value / (quantity * Decimal(400) / Decimal(1000))
+                elif ID_measure.ID_unit == 7:  # Литр
+                    price.price_for_kg = price_value / quantity
+                elif ID_measure.ID_unit == 8:  # Бутылка
+                    price.price_for_kg = price_value / (quantity * Decimal(160) / Decimal(1000))
+
+                # Рассчитываем цену за год и за месяц
+                price.price_for_year = price.price_for_kg * Decimal(price.years_norm)
+                price.price_for_month = price.price_for_year / Decimal(12)
+
+            # Сохраняем данные в БД
             price.save()
-            return redirect('price_add')
+            return redirect('price_add')  # Перенаправляем обратно на страницу после сохранения
     else:
         form = PriceForm(language=language)
 
     return render(request, 'price_add.html', {'form': form})
+
 
 
 def price_add_list(request):
@@ -128,3 +186,4 @@ def statistics(request):
 
 def about_us(request):
     return render(request, 'about_us.html')
+
