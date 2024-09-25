@@ -1,8 +1,10 @@
+# core/forms.py
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import PasswordChangeForm
+from .models import Price, Product, Region, UnitOfMeasurement
 
 
 
@@ -53,4 +55,45 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         strip=False,
         help_text=None  # Убираем подсказки по умолчанию
     )
+
+
+
+class PriceForm(forms.ModelForm):
+    class Meta:
+        model = Price
+        fields = ['ID_region', 'ID_product', 'ID_measure', 'quantity', 'price']
+        labels = {
+            'ID_region': _('Регион'),
+            'ID_product': _('Продукт'),
+            'ID_measure': _('Единица измерения'),
+            'quantity': _('Количество'),
+            'price': _('Цена'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        language = kwargs.pop('language', 'ru')
+        super().__init__(*args, **kwargs)
+
+        # Динамическое обновление наименований полей в зависимости от языка
+        if language == 'kk':
+            self.fields['ID_product'].queryset = Product.objects.all()
+            self.fields['ID_product'].label_from_instance = lambda obj: obj.product_KZ
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
+            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_KZ
+            self.fields['ID_region'].queryset = Region.objects.all()
+            self.fields['ID_region'].label_from_instance = lambda obj: obj.region_KZ
+        elif language == 'en':
+            self.fields['ID_product'].queryset = Product.objects.all()
+            self.fields['ID_product'].label_from_instance = lambda obj: obj.product_EN
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
+            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_EN
+            self.fields['ID_region'].queryset = Region.objects.all()
+            self.fields['ID_region'].label_from_instance = lambda obj: obj.region_EN
+        else:
+            self.fields['ID_product'].queryset = Product.objects.all()
+            self.fields['ID_product'].label_from_instance = lambda obj: obj.product_RU
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
+            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_RU
+            self.fields['ID_region'].queryset = Region.objects.all()
+            self.fields['ID_region'].label_from_instance = lambda obj: obj.region_RU
 

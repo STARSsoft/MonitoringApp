@@ -13,6 +13,9 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),       # Путь для страницы личного кабинета
     path('logout/', auth_views.LogoutView.as_view(), name='logout'), # Путь для деавторизации
     path('login-required/', views.login_required_view, name='login_required'),
+    path('priceadd-list/', views.price_add_list, name='price_add_list'),  # Для списочной формы
 
 ]
+
+
 

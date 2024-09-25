@@ -4,5 +4,13 @@
 {% block title %}{% trans "Добавить цены" %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Страница добавления цен" %}</h1>
+    <h1>{% trans "Добавить цены" %}</h1>
+    <form method="POST" class="styled-form">  <!-- Добавляем класс для стилей -->
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
+    </form>
+
+    <br/>
+    <a href="{% url 'price_add_list' %}">{% trans "Внести цены списком" %}</a>
 {% endblock %}

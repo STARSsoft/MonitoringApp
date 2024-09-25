@@ -1,3 +1,5 @@
+# core/views.py
+
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
 from django.contrib.auth import authenticate, login
@@ -8,6 +10,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.utils.translation import gettext as _
 from django.contrib.auth import update_session_auth_hash
 from .forms import UserProfileForm, CustomPasswordChangeForm  # Импортируйте вашу кастомную форму
+from .forms import PriceForm
+from django.contrib.auth.decorators import login_required
 
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
@@ -94,7 +98,26 @@ def start_page(request):
     translated_text = _("Главная страница")
     return render(request, 'start_page.html', {'translated_text': translated_text})
 
+@login_required
+def add_price(request):
+    language = request.LANGUAGE_CODE  # Получаем текущий язык
+    if request.method == 'POST':
+        form = PriceForm(request.POST, language=language)
+        if form.is_valid():
+            price = form.save(commit=False)
+            price.username = request.user
+            price.date = timezone.now()
+            price.save()
+            return redirect('price_add')
+    else:
+        form = PriceForm(language=language)
 
+    return render(request, 'price_add.html', {'form': form})
+
+
+def price_add_list(request):
+    # Здесь логика для добавления цен списком
+    return render(request, 'price_add_list.html')  # Вы должны создать шаблон price_add_list.html
 
 
 # Остальные представления

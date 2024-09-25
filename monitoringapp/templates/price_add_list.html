@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Внести цены списком" %}{% endblock %}
+
+{% block content %}
+  <h1>{% trans "Внести цены списком" %}</h1>
+  
+  <!-- Форма для внесения цен списком -->
+  <form method="POST">
+    {% csrf_token %}
+    <!-- Здесь разместите таблицу или список для добавления цен -->
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Продукт" %}</th>
+          <th>{% trans "Единица измерения" %}</th>
+          <th>{% trans "Количество" %}</th>
+          <th>{% trans "Цена" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Пример строки таблицы -->
+        <tr>
+          <td>Продукт 1</td>
+          <td>Кг</td>
+          <td><input type="number" name="quantity_1" /></td>
+          <td><input type="number" name="price_1" /></td>
+        </tr>
+        <!-- Здесь добавьте строки для других продуктов -->
+      </tbody>
+    </table>
+    
+    <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
+  </form>
+{% endblock %}
