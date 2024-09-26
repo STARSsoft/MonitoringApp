@@ -1218,6 +1218,8 @@ MIDDLEWARE = [
 Для начала необходимо настроить форму внесения цен на продукты питания пользователями. Задумывается два варианта внесения цен: единичный и списком. 
 
 Настраиваем первый вариант внесения цен - единичный. Суть формы, когда пользователь выбирает только один товар, добавляет на него цену и отправляет в базу данных.
+Данная форма будет иметь возможность не только загружать списки необходимых данных из БД, но и предлагать пользователю единицу измерения на продукт по умолчанию и в выпадающем списке предлагать только те единицы измерения, которые подходят для данного типа продуктов, чтобы пользователи намеренно или случайно не выбрали например для картошки, единицу измерения бутылка. Для реализации динамической подстановки данных, придется прибегнуть к JavaScript и Ajax.
+
 Создаем форму шаблона:
 ``` 
 {% extends 'base.html' %}
@@ -1227,15 +1229,79 @@ MIDDLEWARE = [
 
 {% block content %}
     <h1>{% trans "Добавить цены" %}</h1>
-    <form method="POST" class="styled-form">  <!-- Добавляем класс для стилей -->
+    <form id="price-form" method="POST" class="styled-form">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
     </form>
 
     <br/>
-    <a href="{% url 'price_add_list' %}">{% trans "Внести цены списком" %}</a>
+    <h2><a href="{% url 'price_add_list' %}">{% trans "Внести цены списком" %}</a></h2>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productSelect = document.querySelector('#id_ID_product');
+            const measureSelect = document.querySelector('#id_ID_measure');
+            const form = document.querySelector('#price-form');
+
+            // Функция для обновления единиц измерения
+            function updateMeasurements(measures, defaultMeasure) {
+                measureSelect.innerHTML = '';
+
+                measures.forEach(measure => {
+                    const option = document.createElement('option');
+                    option.value = measure.id;
+                    option.textContent = measure.name;
+                    if (measure.id === defaultMeasure) {
+                        option.selected = true;
+                    }
+                    measureSelect.appendChild(option);
+                });
+            }
+
+            // Обработка изменения продукта
+            productSelect.addEventListener('change', function () {
+                const productId = this.value;
+                const url = `{% url 'get_measurements' 0 %}`.replace('0', productId);
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.measures) {
+                            updateMeasurements(data.measures, data.default_measure);
+                        }
+                    })
+                    .catch(error => console.error('Error fetching measurements:', error));
+            });
+
+            // Обработка отправки формы через Ajax
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+
+                fetch("{% url 'price_add' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Цена успешно сохранена!');
+                            window.location.href = "{% url 'thanks' %}";
+                        } else if (data.status === 'error') {
+                            alert('Ошибка при сохранении цены: ' + JSON.stringify(data.errors));
+                        }
+                    })
+                    .catch(error => console.error('Error submitting form:', error));
+            });
+        });
+    </script>
 {% endblock %}
+
 ```
 64. Чтобы форма была выполнена в едином стиле с остальными формами сайт, добавляем в базовый шаблон настройки CSS стилей:
 ``` 
@@ -1296,25 +1362,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class Price(models.Model):
-    ID_product = models.ForeignKey('Product', on_delete=models.CASCADE)  # Продукт
-    ID_region = models.ForeignKey('Region', on_delete=models.CASCADE)  # Регион
-    quantity = models.FloatField()  # Количество
-    ID_measure = models.ForeignKey('UnitOfMeasurement', on_delete=models.CASCADE)  # Единица измерения
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена
-    username = models.ForeignKey(User, on_delete=models.CASCADE)  # Пользователь
-    date = models.DateTimeField(default=timezone.now)  # Дата
-    years_norm = models.FloatField()  # Годовые нормы потребления
-    price_for_kg = models.DecimalField(max_digits=10, decimal_places=2)  # Цена за кг
-    price_for_year = models.DecimalField(max_digits=10, decimal_places=2)  # Цена за год
-    price_for_month = models.DecimalField(max_digits=10, decimal_places=2)  # Цена за месяц
-
-    class Meta:
-        db_table = 'mp_prices_all'  # Привязка к существующей таблице
-
-    def __str__(self):
-        return f"Цена для {self.ID_product} в {self.ID_region}"
-
 # Модель для продуктов
 class Product(models.Model):
     ID_product = models.AutoField(primary_key=True)  # Явный первичный ключ
@@ -1364,72 +1411,115 @@ class UnitOfMeasurement(models.Model):
     def __str__(self):
         return self.name_unit_RU  # Выводим название единицы измерения на русском
 ```
-Данная модель загружает в базу данных все внесенные данные из формы.
+Данная модель загружает из базы данных все данные для заполнения формы, которые пользователь видит в выпадающих списках.
 66. Но прежде чем пользователь сможет заносить данные, нужно создать представление формы, где будут загружаться из базы данных наименование региона, продукта и единицы измерения.
 Файл 'views.py'
 ``` 
+
 @login_required
 def add_price(request):
-    language = request.LANGUAGE_CODE  # Получаем текущий язык
+    language = request.LANGUAGE_CODE
     if request.method == 'POST':
         form = PriceForm(request.POST, language=language)
+
         if form.is_valid():
-            price = form.save(commit=False)  # Не сохраняем сразу, чтобы добавить дополнительные данные
+            price = form.save(commit=False)
 
             price.username = request.user  # Устанавливаем текущего пользователя
             price.date = timezone.now()  # Устанавливаем текущую дату
 
-            # Явно получаем объект продукта
+            # Получаем объект продукта
             selected_product = form.cleaned_data.get('ID_product')
-            price.ID_product = selected_product  # Назначаем объект продукта
-            price.years_norm = selected_product.years_norm  # Присваиваем years_norm из продукта
+            price.ID_product = selected_product
+            price.years_norm = selected_product.years_norm
 
-            # Получаем другие данные из формы
+            # Получаем данные из формы
             quantity = form.cleaned_data.get('quantity')
             price_value = form.cleaned_data.get('price')
             ID_measure = form.cleaned_data.get('ID_measure')
 
-            if quantity and price_value and ID_measure:
-                # Приводим количество к Decimal для совместимости
-                quantity = Decimal(quantity)
+            # Вычисляем цену за кг, за год и за месяц
+            price.price_for_kg, price.price_for_year, price.price_for_month = calculate_prices(
+                quantity, price_value, ID_measure, selected_product.years_norm
+            )
 
-                # Выполняем расчеты в зависимости от выбранной единицы измерения
-                if ID_measure.ID_unit == 1:  # Килограмм
-                    price.price_for_kg = price_value / quantity
-                elif ID_measure.ID_unit == 2:  # Грамм
-                    price.price_for_kg = price_value / (quantity / Decimal(1000))
-                elif ID_measure.ID_unit == 3:  # Штук
-                    price.price_for_kg = price_value / quantity
-                elif ID_measure.ID_unit == 4:  # Пучок
-                    price.price_for_kg = price_value / (quantity * Decimal(150) / Decimal(1000))
-                elif ID_measure.ID_unit == 5:  # Упаковка
-                    price.price_for_kg = price_value / (selected_product.years_norm * Decimal(1000))
-                elif ID_measure.ID_unit == 6:  # Булка
-                    price.price_for_kg = price_value / (quantity * Decimal(400) / Decimal(1000))
-                elif ID_measure.ID_unit == 7:  # Литр
-                    price.price_for_kg = price_value / quantity
-                elif ID_measure.ID_unit == 8:  # Бутылка
-                    price.price_for_kg = price_value / (quantity * Decimal(160) / Decimal(1000))
-
-                # Рассчитываем цену за год и за месяц
-                price.price_for_year = price.price_for_kg * Decimal(price.years_norm)
-                price.price_for_month = price.price_for_year / Decimal(12)
-
-            # Сохраняем данные в БД
+            # Сохраняем запись
             price.save()
-            return redirect('price_add')  # Перенаправляем обратно на страницу после сохранения
+            return JsonResponse({'status': 'success', 'message': 'Price saved successfully'})
+
+        return JsonResponse({'status': 'error', 'errors': form.errors})
+
     else:
         form = PriceForm(language=language)
 
     return render(request, 'price_add.html', {'form': form})
 
 
+def get_measurements(request, product_id):
+    try:
+        product = Product.objects.get(pk=product_id)
+        measures = []
+
+        if product.measure_1:
+            measures.append({'id': 1, 'name': 'Килограмм'})
+        if product.measure_2:
+            measures.append({'id': 2, 'name': 'Грамм'})
+        if product.measure_3:
+            measures.append({'id': 3, 'name': 'Штук'})
+        if product.measure_4:
+            measures.append({'id': 4, 'name': 'Пучок'})
+        if product.measure_5:
+            measures.append({'id': 5, 'name': 'Упаковка'})
+        if product.measure_6:
+            measures.append({'id': 6, 'name': 'Булка'})
+        if product.measure_7:
+            measures.append({'id': 7, 'name': 'Литр'})
+        if product.measure_8:
+            measures.append({'id': 8, 'name': 'Бутылка'})
+
+        default_measure = product.measure_default
+
+        return JsonResponse({
+            'measures': measures,
+            'default_measure': default_measure
+        })
+
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Product not found'}, status=404)
+
+
+def calculate_prices(quantity, price, measure, years_norm):
+    quantity = Decimal(quantity)
+    price = Decimal(price)
+    years_norm = Decimal(years_norm)
+
+    if measure.ID_unit == 1:  # Килограмм
+        price_for_kg = price / quantity
+    elif measure.ID_unit == 2:  # Грамм
+        price_for_kg = price / (quantity / Decimal(1000))
+    elif measure.ID_unit == 3:  # Штук
+        price_for_kg = price / quantity
+    elif measure.ID_unit == 4:  # Пучок
+        price_for_kg = price / (quantity * Decimal(150) / Decimal(1000))
+    elif measure.ID_unit == 5:  # Упаковка
+        price_for_kg = price / (years_norm * Decimal(1000))
+    elif measure.ID_unit == 6:  # Булка
+        price_for_kg = price / (quantity * Decimal(400) / Decimal(1000))
+    elif measure.ID_unit == 7:  # Литр
+        price_for_kg = price / quantity
+    elif measure.ID_unit == 8:  # Бутылка
+        price_for_kg = price / (quantity * Decimal(160) / Decimal(1000))
+
+    price_for_year = price_for_kg * years_norm
+    price_for_month = price_for_year / Decimal(12)
+
+    return price_for_kg, price_for_year, price_for_month
 
 def price_add_list(request):
     # Здесь логика для добавления цен списком
     return render(request, 'price_add_list.html')  # Позже доработать шаблон price_add_list.html
 ```
-Тут форма передает такие данные как имя пользователя, текущую дату. При этом при отправке данных в базу данных, проводим пересчет полученных данных в килограммы, с учетом годовых норм потребления продуктов получаем годовую цены на продукт, и в конце пересчитываем это на месячную норму.
+Тут форма передает такие данные как имя пользователя, текущую дату. При этом при отправке данных в базу данных, проводим пересчет полученных данных в килограммы, с учетом годовых норм потребления продуктов получаем годовые цены на продукт, и в конце пересчитываем это на месячную норму.
 
 Функция 'price_add_list' пока как заглушка. К ней вернемся позже.  
 67. Ну и чтобы форма могла не только выбирать из базы данных в выпадающие списки наименование регионов, единиц измерения и наименования продуктов, создадим форму, которая будет подгружать необходимые данные на нужном языке в зависимости от выбранного языка.
@@ -1451,29 +1541,30 @@ from .models import Price, Product, Region, UnitOfMeasurement
 
     def __init__(self, *args, **kwargs):
         language = kwargs.pop('language', 'ru')
+        selected_product = kwargs.pop('selected_product', None)
         super().__init__(*args, **kwargs)
 
-        # Динамическое обновление наименований полей в зависимости от языка
         if language == 'kk':
             self.fields['ID_product'].queryset = Product.objects.all()
             self.fields['ID_product'].label_from_instance = lambda obj: obj.product_KZ
-            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
-            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_KZ
             self.fields['ID_region'].queryset = Region.objects.all()
             self.fields['ID_region'].label_from_instance = lambda obj: obj.region_KZ
         elif language == 'en':
             self.fields['ID_product'].queryset = Product.objects.all()
             self.fields['ID_product'].label_from_instance = lambda obj: obj.product_EN
-            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
-            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_EN
             self.fields['ID_region'].queryset = Region.objects.all()
             self.fields['ID_region'].label_from_instance = lambda obj: obj.region_EN
         else:
             self.fields['ID_product'].queryset = Product.objects.all()
             self.fields['ID_product'].label_from_instance = lambda obj: obj.product_RU
-            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.all()
-            self.fields['ID_measure'].label_from_instance = lambda obj: obj.name_unit_RU
             self.fields['ID_region'].queryset = Region.objects.all()
             self.fields['ID_region'].label_from_instance = lambda obj: obj.region_RU
+
+        if selected_product:
+            available_measures = get_available_measures(selected_product)
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.filter(
+                ID_unit__in=[measure['id'] for measure in available_measures]
+            )
+
 ```
 68. 

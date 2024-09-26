@@ -56,8 +56,6 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         help_text=None  # Убираем подсказки по умолчанию
     )
 
-
-
 class PriceForm(forms.ModelForm):
     class Meta:
         model = Price
@@ -72,9 +70,9 @@ class PriceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         language = kwargs.pop('language', 'ru')
+        selected_product = kwargs.pop('selected_product', None)
         super().__init__(*args, **kwargs)
 
-        # Динамическое обновление наименований полей в зависимости от языка
         if language == 'kk':
             self.fields['ID_product'].queryset = Product.objects.all()
             self.fields['ID_product'].label_from_instance = lambda obj: obj.product_KZ
@@ -91,5 +89,8 @@ class PriceForm(forms.ModelForm):
             self.fields['ID_region'].queryset = Region.objects.all()
             self.fields['ID_region'].label_from_instance = lambda obj: obj.region_RU
 
-        # Изначально оставляем поле с единицей измерения пустым, так как оно будет загружаться динамически
-        self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.none()
+        if selected_product:
+            available_measures = get_available_measures(selected_product)
+            self.fields['ID_measure'].queryset = UnitOfMeasurement.objects.filter(
+                ID_unit__in=[measure['id'] for measure in available_measures]
+            )
