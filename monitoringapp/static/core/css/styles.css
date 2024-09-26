@@ -322,7 +322,7 @@ body {
     border-radius: 4px;
 }
 .styled-form-l select {
-    width: 90%;
+    width: 200px;
     padding: 5px;
     margin-bottom: 5px;
     font-size: 16px;

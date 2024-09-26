@@ -16,7 +16,6 @@ from django.http import JsonResponse
 from .models import Product, UnitOfMeasurement, Region, Price
 
 
-
 # Страница для ввода цен
 @login_required(login_url='login_required')  # Переадресация на страницу для неавторизованных
 def price_add(request):
@@ -67,8 +66,6 @@ def login_view(request):
     return render(request, 'login.html')
 
 
-
-
 @login_required
 def profile_view(request):
     # Обработка формы редактирования профиля
@@ -96,14 +93,9 @@ def profile_view(request):
         'password_form': password_form,
     })
 
-
-
 def start_page(request):
     translated_text = _("Главная страница")
     return render(request, 'start_page.html', {'translated_text': translated_text})
-
-
-
 
 @login_required
 def add_price(request):
@@ -143,40 +135,6 @@ def add_price(request):
 
     return render(request, 'price_add.html', {'form': form})
 
-
-def get_measurements(request, product_id):
-    try:
-        product = Product.objects.get(pk=product_id)
-        measures = []
-
-        if product.measure_1:
-            measures.append({'id': 1, 'name': 'Килограмм'})
-        if product.measure_2:
-            measures.append({'id': 2, 'name': 'Грамм'})
-        if product.measure_3:
-            measures.append({'id': 3, 'name': 'Штук'})
-        if product.measure_4:
-            measures.append({'id': 4, 'name': 'Пучок'})
-        if product.measure_5:
-            measures.append({'id': 5, 'name': 'Упаковка'})
-        if product.measure_6:
-            measures.append({'id': 6, 'name': 'Булка'})
-        if product.measure_7:
-            measures.append({'id': 7, 'name': 'Литр'})
-        if product.measure_8:
-            measures.append({'id': 8, 'name': 'Бутылка'})
-
-        default_measure = product.measure_default
-
-        return JsonResponse({
-            'measures': measures,
-            'default_measure': default_measure
-        })
-
-    except Product.DoesNotExist:
-        return JsonResponse({'error': 'Product not found'}, status=404)
-
-
 def calculate_prices(quantity, price, measure, years_norm):
     quantity = Decimal(quantity)
     price = Decimal(price)
@@ -203,8 +161,6 @@ def calculate_prices(quantity, price, measure, years_norm):
     price_for_month = price_for_year / Decimal(12)
 
     return price_for_kg, price_for_year, price_for_month
-
-
 
 
 # Страница для внесения цен списком
@@ -267,62 +223,81 @@ def price_add_list(request):
 
         return JsonResponse({'status': 'success'})
 
-    # Отправка данных для формы
+    # Подготовка данных для отображения на разных языках
     products = Product.objects.all()
     regions = Region.objects.all()
+
+    # Подбираем нужные поля на основе выбранного языка
+    if language == 'kk':
+        products_data = [{'id': p.ID_product, 'name': p.product_KZ, 'measure_default': p.measure_default, 'measures': get_measures(p, 'kk')} for p in products]
+        regions_data = [{'id': r.ID_region, 'name': r.region_KZ} for r in regions]
+    elif language == 'en':
+        products_data = [{'id': p.ID_product, 'name': p.product_EN, 'measure_default': p.measure_default, 'measures': get_measures(p, 'en')} for p in products]
+        regions_data = [{'id': r.ID_region, 'name': r.region_EN} for r in regions]
+    else:
+        products_data = [{'id': p.ID_product, 'name': p.product_RU, 'measure_default': p.measure_default, 'measures': get_measures(p, 'ru')} for p in products]
+        regions_data = [{'id': r.ID_region, 'name': r.region_RU} for r in regions]
+
     return render(request, 'price_add_list.html', {
-        'products': products,
-        'regions': regions
+        'products': products_data,
+        'regions': regions_data,
     })
 
 
-# Функции для расчета
-def calculate_price_for_kg(price, quantity, measure, product):
-    if measure.ID_unit == 1:  # Килограмм
-        return price / quantity
-    elif measure.ID_unit == 2:  # Грамм
-        return price / (quantity / Decimal(1000))
-    elif measure.ID_unit == 3:  # Штук
-        return price / quantity
-    elif measure.ID_unit == 4:  # Пучок
-        return price / (quantity * Decimal(150) / Decimal(1000))
-    elif measure.ID_unit == 5:  # Упаковка
-        return price / (product.years_norm * Decimal(1000))
-    elif measure.ID_unit == 6:  # Булка
-        return price / (quantity * Decimal(400) / Decimal(1000))
-    elif measure.ID_unit == 7:  # Литр
-        return price / quantity
-    elif measure.ID_unit == 8:  # Бутылка
-        return price / (quantity * Decimal(160) / Decimal(1000))
-    return None
+# Вспомогательная функция для получения доступных единиц измерения
+def get_measures(product, language):
+    measures = []
+    measure_names = {
+        'kk': {
+            1: 'Килограмм',
+            2: 'Грамм',
+            3: 'Дана',
+            4: 'Байлам',
+            5: 'Қаптама',
+            6: 'Орама',
+            7: 'Литр',
+            8: 'Бөтелке',
+        },
+        'ru': {
+            1: 'Килограмм',
+            2: 'Грамм',
+            3: 'Штук',
+            4: 'Пучок',
+            5: 'Упаковка',
+            6: 'Булка',
+            7: 'Литр',
+            8: 'Бутылка',
+        },
+        'en': {
+            1: 'Kilogram',
+            2: 'Gram',
+            3: 'Piece',
+            4: 'Bunch',
+            5: 'Pack',
+            6: 'Loaf',
+            7: 'Liter',
+            8: 'Bottle',
+        }
+    }
 
-def calculate_price_for_year(price, quantity, product, measure):
-    price_for_kg = calculate_price_for_kg(price, quantity, measure, product)
-    return price_for_kg * product.years_norm if price_for_kg else None
+    if product.measure_1:
+        measures.append({'id': 1, 'name': measure_names[language][1]})
+    if product.measure_2:
+        measures.append({'id': 2, 'name': measure_names[language][2]})
+    if product.measure_3:
+        measures.append({'id': 3, 'name': measure_names[language][3]})
+    if product.measure_4:
+        measures.append({'id': 4, 'name': measure_names[language][4]})
+    if product.measure_5:
+        measures.append({'id': 5, 'name': measure_names[language][5]})
+    if product.measure_6:
+        measures.append({'id': 6, 'name': measure_names[language][6]})
+    if product.measure_7:
+        measures.append({'id': 7, 'name': measure_names[language][7]})
+    if product.measure_8:
+        measures.append({'id': 8, 'name': measure_names[language][8]})
 
-def calculate_price_for_month(price, quantity, product, measure):
-    price_for_year = calculate_price_for_year(price, quantity, product, measure)
-    return price_for_year / Decimal(12) if price_for_year else None
-
-# Страница благодарности
-def thanks(request):
-    return render(request, 'thanks.html')
-
-
-
-# Остальные представления
-
-
-def statistics(request):
-    return render(request, 'statistics.html')
-
-def about_us(request):
-    return render(request, 'about_us.html')
-
-def thanks(request):
-    return render(request, 'thanks.html')
-
-
+    return measures
 
 @login_required
 def get_measurements(request, product_id):
@@ -378,3 +353,46 @@ def get_measurements(request, product_id):
         })
     except Product.DoesNotExist:
         return JsonResponse({'error': 'Product not found'}, status=404)
+
+
+# Функция для расчета цены за килограмм
+def calculate_price_for_kg(price, quantity, measure, product):
+    if measure.ID_unit == 1:  # Килограмм
+        return price / quantity
+    elif measure.ID_unit == 2:  # Грамм
+        return price / (quantity / Decimal(1000))
+    elif measure.ID_unit == 3:  # Штук
+        return price / quantity
+    elif measure.ID_unit == 4:  # Пучок
+        return price / (quantity * Decimal(150) / Decimal(1000))
+    elif measure.ID_unit == 5:  # Упаковка
+        return price / (product.years_norm * Decimal(1000))
+    elif measure.ID_unit == 6:  # Булка
+        return price / (quantity * Decimal(400) / Decimal(1000))
+    elif measure.ID_unit == 7:  # Литр
+        return price / quantity
+    elif measure.ID_unit == 8:  # Бутылка
+        return price / (quantity * Decimal(160) / Decimal(1000))
+    else:
+        return Decimal(0)  # Если единица измерения не определена, возвращаем 0
+
+# Функция для расчета цены за год
+def calculate_price_for_year(price, quantity, product, measure):
+    price_for_kg = calculate_price_for_kg(price, quantity, measure, product)
+    return price_for_kg * Decimal(product.years_norm)
+
+# Функция для расчета цены за месяц
+def calculate_price_for_month(price, quantity, product, measure):
+    price_for_year = calculate_price_for_year(price, quantity, product, measure)
+    return price_for_year / Decimal(12)
+
+
+# Остальные представления
+def statistics(request):
+    return render(request, 'statistics.html')
+
+def about_us(request):
+    return render(request, 'about_us.html')
+
+def thanks(request):
+    return render(request, 'thanks.html')
