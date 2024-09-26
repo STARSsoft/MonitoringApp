@@ -14,6 +14,12 @@ from .forms import PriceForm
 from decimal import Decimal  # Импортируем Decimal для работы с числами
 from django.http import JsonResponse
 from .models import Product, UnitOfMeasurement, Region, Price
+from django.db.models import Avg
+from datetime import timedelta, date
+from django.utils import timezone
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta  # Для работы с периодами
+
 
 
 # Страница для ввода цен
@@ -387,9 +393,142 @@ def calculate_price_for_month(price, quantity, product, measure):
     return price_for_year / Decimal(12)
 
 
-# Остальные представления
+# Представление для статистики
+
 def statistics(request):
-    return render(request, 'statistics.html')
+    language = request.LANGUAGE_CODE  # Определяем текущий язык
+
+    # Получаем все регионы для выбора
+    regions = Region.objects.all()
+
+    # По умолчанию выбран весь Казахстан
+    selected_region = request.GET.get('region', '---')
+
+    # Текущая дата
+    today = timezone.now().date()
+    first_day_of_current_month = today.replace(day=1)
+
+    # Периоды для расчетов
+    last_month_start = first_day_of_current_month - relativedelta(months=1)
+    last_month_end = first_day_of_current_month - timedelta(days=1)
+
+    three_months_ago_start = first_day_of_current_month - relativedelta(months=3)
+    three_months_ago_end = three_months_ago_start + relativedelta(day=31)
+
+    six_months_ago_start = first_day_of_current_month - relativedelta(months=6)
+    six_months_ago_end = six_months_ago_start + relativedelta(day=31)
+
+    twelve_months_ago_start = first_day_of_current_month - relativedelta(years=1)
+    twelve_months_ago_end = twelve_months_ago_start + relativedelta(day=31)
+
+    # Подготовка списка продуктов
+    products = Product.objects.all()
+
+    # Примерное использование фильтра для региона, если выбран регион
+    if selected_region != '---':
+        region_filter = {'ID_region__ID_region': selected_region}
+    else:
+        region_filter = {}
+
+    statistics_data = []
+
+    # Цикл по каждому продукту для расчета статистики
+    for product in products:
+        # Определяем название продукта в зависимости от текущего языка
+        if language == 'kk':
+            product_name = product.product_KZ
+        elif language == 'en':
+            product_name = product.product_EN
+        else:
+            product_name = product.product_RU
+
+        # Средняя цена за текущий месяц
+        current_month_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(first_day_of_current_month, today),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        current_month_price = current_month_prices['avg_price'] or 0
+
+        # Средняя цена за прошлый месяц
+        last_month_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(last_month_start, last_month_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_last_month = last_month_prices['avg_price'] or 0
+
+        # Средняя цена за 3 месяца назад
+        three_months_ago_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(three_months_ago_start, three_months_ago_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_three_months_ago = three_months_ago_prices['avg_price'] or 0
+
+        # Средняя цена за 6 месяцев назад
+        six_months_ago_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(six_months_ago_start, six_months_ago_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_six_months_ago = six_months_ago_prices['avg_price'] or 0
+
+        # Средняя цена за 12 месяцев назад
+        twelve_months_ago_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(twelve_months_ago_start, twelve_months_ago_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_twelve_months_ago = twelve_months_ago_prices['avg_price'] or 0
+
+        # Вычисляем изменения в процентах
+        def calculate_percentage_change(current, previous):
+            if previous == 0:
+                return 0
+            return ((current - previous) / previous) * 100
+
+        change_last_month = calculate_percentage_change(current_month_price, price_last_month)
+        change_three_months = calculate_percentage_change(current_month_price, price_three_months_ago)
+        change_six_months = calculate_percentage_change(current_month_price, price_six_months_ago)
+        change_twelve_months = calculate_percentage_change(current_month_price, price_twelve_months_ago)
+
+        # Если продукт — хлеб или яйца, применяем специальные расчеты
+        if product.ID_product in [3, 4, 5]:  # Хлеб
+            current_month_price = (current_month_price / 1000) * 400
+            price_last_month = (price_last_month / 1000) * 400
+            price_three_months_ago = (price_three_months_ago / 1000) * 400
+            price_six_months_ago = (price_six_months_ago / 1000) * 400
+            price_twelve_months_ago = (price_twelve_months_ago / 1000) * 400
+        elif product.ID_product == 98:  # Яйца
+            current_month_price *= 10
+            price_last_month *= 10
+            price_three_months_ago *= 10
+            price_six_months_ago *= 10
+            price_twelve_months_ago *= 10
+
+        statistics_data.append({
+            'product_name': product_name,
+            'current_price': current_month_price,
+            'price_last_month': price_last_month,
+            'change_last_month': change_last_month,
+            'price_three_months_ago': price_three_months_ago,
+            'change_three_months': change_three_months,
+            'price_six_months_ago': price_six_months_ago,
+            'change_six_months': change_six_months,
+            'price_twelve_months_ago': price_twelve_months_ago,
+            'change_twelve_months': change_twelve_months,
+        })
+
+    return render(request, 'statistics.html', {
+        'statistics_data': statistics_data,
+        'regions': regions,
+        'selected_region': selected_region,
+    })
+
+
+# Остальные представления
+
 
 def about_us(request):
     return render(request, 'about_us.html')

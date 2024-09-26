@@ -4,5 +4,67 @@
 {% block title %}{% trans "Статистика" %}{% endblock %}
 
 {% block content %}
-    <H1>{% trans "Страница для вывода статистики" %}</H1>
+    <h1>{% trans "Страница для вывода статистики" %}</h1>
+
+    <!-- Поле для выбора региона -->
+    <form method="GET" action="{% url 'statistics' %}">
+        <label for="region">{% trans "Регион" %}:</label>
+        <select id="region" name="region">
+            <option value="---" {% if selected_region == '---' %}selected{% endif %}>{% trans "Республика Казахстан" %}</option>
+            {% for region in regions %}
+                <option value="{{ region.ID_region }}" {% if selected_region == region.ID_region %}selected{% endif %}>{{ region.region_RU }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">{% trans "Показать" %}</button>
+    </form>
+
+    <!-- Таблица статистики -->
+    <table class="statistics">
+        <thead>
+            <tr>
+                <th rowspan="2">{% trans "Наименование продуктов" %}</th>
+                <th rowspan="2">{% trans "Цена в этом месяце" %}</th>
+                <th colspan="2">{% trans "Цена в прошлом месяце" %}</th>
+                <th colspan="2">{% trans "Цена за 3 месяца" %}</th>
+                <th colspan="2">{% trans "Цена за 6 месяцев" %}</th>
+                <th colspan="2">{% trans "Цена за 12 месяцев" %}</th>
+            </tr>
+            <tr>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in statistics_data %}
+            <tr>
+                <td>{{ data.product_name }}</td>
+                <td>{{ data.current_price|floatformat:2 }}</td>
+                <td>{{ data.price_one_month_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_one_month > 0 %}red{% else %}green{% endif %};">{{ data.change_one_month|floatformat:2 }}%</span></td>
+                <td>{{ data.price_three_months_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_three_months > 0 %}red{% else %}green{% endif %};">{{ data.change_three_months|floatformat:2 }}%</span></td>
+                <td>{{ data.price_six_months_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_six_months > 0 %}red{% else %}green{% endif %};">{{ data.change_six_months|floatformat:2 }}%</span></td>
+                <td>{{ data.price_twelve_months_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_twelve_months > 0 %}red{% else %}green{% endif %};">{{ data.change_twelve_months|floatformat:2 }}%</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Примечание -->
+<form class="notice">
+    <p>{% trans "Примечание:" %}</p>
+    <ul>
+        <li>{% trans "Все цены указаны за килограмм." %}</li>
+        <li>{% trans "Цены за хлеб указаны за булку." %}</li>
+        <li>{% trans "Цены за яйца указаны за десяток." %}</li>
+    </ul>
+</form>
 {% endblock %}

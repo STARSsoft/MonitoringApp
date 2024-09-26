@@ -393,3 +393,85 @@ body {
 .styled-form button:hover {
     background-color: #3543de;
 }
+
+/* Общие стили для таблицы  страницы статистики */
+table.statistics {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table.statistics th,
+table.statistics td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 14px;
+}
+
+/* Выровнять заголовки по центру */
+table.statistics th {
+    text-align: center;
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Выровнять содержимое столбца с продуктами по левому краю */
+table.statistics td:first-child {
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Кнопка "Показать" для выбора региона */
+form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Стиль для выпадающего списка региона */
+form select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+/* Стиль для изменения цвета текста в зависимости от значений */
+table.statistics td span {
+    font-weight: bold;
+    padding: 5px;
+}
+
+/* Hover эффект для кнопки */
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Hover эффект для строк таблицы */
+table.statistics tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Списки для примечаний в Статистике */
+.notice p {
+    margin-bottom: 8px;  /* Отступ между элементами списка */
+    font-size: 16px;
+    text-align: left;
+}
+
+.notice ul {
+    padding-left: 20px;  /* Отступ для маркированного списка */
+    text-align: left;     /* Выравниваем текст внутри списка по левому краю */
+    list-style: disc;     /* Убедимся, что используется маркированный стиль списка */
+}
+
+.notice ul li {
+    margin-bottom: 8px;  /* Отступ между элементами списка */
+    font-size: 13px;
+}
