@@ -1,0 +1,395 @@
+/* core/static/core/css/styles.css */
+
+
+
+/* Общий контейнер для сайта */
+.container {
+    max-width: 1200px; /* Ширина сайта 1200px */
+    margin: 0 auto;  /* Центрирование сайта, с пустым пространством слева и справа */
+}
+
+.banner {
+    width: 1200px;
+    height: 150px;
+    background-image: url("/static/core/images/banner2.jpg"); /* Указываем прямой путь к изображению */
+    background-size: cover;
+    max-width: 100%;
+}
+
+.banner-container {
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+}
+
+.menu {
+    background-color: #add8e6; /* Светло-голубой фон */
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px; /* Слегка закругленные углы */
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;
+}
+
+.menu a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+.auth-button {
+    margin-left: auto;  /* Отодвигает кнопку авторизации в конец меню */
+    position: relative;  /* Для позиционирования выпадающего меню */
+}
+
+.user-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+/* Общие стили для формы личного кабинета */
+.profile-form, .password-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+/* Заголовки по центру */
+.profile-form h1, .password-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Лейблы и текст внутри форм по левому краю */
+.profile-form .form-group, .password-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.profile-form label, .password-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.profile-form input, .password-form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Выровняем маркированные списки по левому краю */
+.password-form ul {
+    padding-left: 20px;  /* Отступ для маркированного списка */
+    text-align: left;     /* Выравниваем текст внутри списка по левому краю */
+    list-style: disc;     /* Убедимся, что используется маркированный стиль списка */
+}
+
+.password-form ul li {
+    margin-bottom: 8px;  /* Отступ между элементами списка */
+    font-size: 13px;
+}
+
+/* Кнопки по центру */
+.save-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #add8e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color: #3543de;
+}
+
+/* Стили для формы регистрации */
+.registration-form {
+    max-width: 400px;
+    margin: 0 auto; /* Центрируем форму на странице */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.registration-form .form-group {
+    margin-bottom: 20px;  /* Отступ между полями ввода */
+    text-align: left;
+}
+
+.registration-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;  /* Увеличим шрифт */
+}
+
+.registration-form input {
+    width: 100%;  /* Поля занимают всю ширину контейнера */
+    padding: 10px;
+    font-size: 16px;  /* Увеличим шрифт для удобства */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;  /* Чтобы padding не влиял на ширину */
+}
+
+.register-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #add8e6;  /* Светло-голубой цвет кнопки */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background-color: #3543de; /* Синий цвет кнопки при наведении */
+}
+
+/* Для отступов внизу и центре */
+.registration-form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.registration-form p {
+    margin-top: 20px;
+    text-align: left;
+}
+
+/* Для отображения ошибок */
+.registration-form p.error {
+    color: red;
+    text-align: center;
+}
+
+/* Стили для формы авторизации */
+.login-form {
+    max-width: 400px;
+    margin: 0 auto; /* Центрируем форму на странице */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;  /* Отступ между полями ввода */
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;  /* Увеличим шрифт */
+}
+
+.form-group input {
+    width: 100%;  /* Поля занимают всю ширину контейнера */
+    padding: 10px;
+    font-size: 16px;  /* Увеличим шрифт для удобства */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;  /* Чтобы padding не влиял на ширину */
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #add8e6;  /* Светло голубой цвет кнопки */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #3543de; /* Синий цвет кнопки при наведении */
+}
+
+/* Для отступов внизу и центре */
+.login-form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.login-form p {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Для отображения ошибок */
+.login-form p.error {
+    color: red;
+    text-align: center;
+}
+
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+
+/* Стили для выпадающего меню */
+.dropdown-menu {
+    display: none;  /* По умолчанию скрыто */
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    min-width: 150px;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: left; /* Выровняем текст влево */
+}
+
+.auth-button:hover .dropdown-menu {
+    display: block;  /* Показываем при наведении */
+}
+
+.dropdown-menu a, .dropdown-menu form {
+    display: block;
+    padding: 5px 0;
+    color: black;
+    text-decoration: none;
+    font-size: 16px;  /* Устанавливаем одинаковый размер шрифта */
+    text-align: left;  /* Выравниваем текст по левому краю */
+}
+
+.dropdown-menu a:hover, .dropdown-menu form button:hover {
+    text-decoration: underline;
+}
+
+.dropdown-menu form button {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    text-align: left;  /* Выравниваем текст по левому краю */
+}
+
+/* Стили для формы добавления цен списком*/
+.styled-form-l {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.styled-form-l label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.styled-form-l input {
+    width: 100px;
+    padding: 5px;
+    margin-bottom: 7px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.styled-form-l select {
+    width: 90%;
+    padding: 5px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.styled-form-l button {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #add8e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.styled-form-l button:hover {
+    background-color: #3543de;
+}
+
+/* Стили для формы добавления цен */
+.styled-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.styled-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.styled-form input {
+    width: 97%;
+    padding: 5px;
+    margin-bottom: 7px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.styled-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 7px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.styled-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #add8e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.styled-form button:hover {
+    background-color: #3543de;
+}

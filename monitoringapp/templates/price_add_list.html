@@ -4,33 +4,137 @@
 {% block title %}{% trans "Внести цены списком" %}{% endblock %}
 
 {% block content %}
-  <h1>{% trans "Внести цены списком" %}</h1>
-  
-  <!-- Форма для внесения цен списком -->
-  <form method="POST" class="styled-form-l">
-    {% csrf_token %}
-    <!-- Здесь разместите таблицу или список для добавления цен -->
-    <table>
+<h1>{% trans "Внести цены списком" %}</h1>
+
+<form id="price-form" method="POST" class="styled-form-l">
+  <!-- Поле для выбора региона -->
+  <label for="region">{% trans "Регион" %}</label>
+  <select id="region" name="region" required>
+      <option value="---">{% trans "Выберите регион" %}</option>
+      {% for region in regions %}
+          <option value="{{ region.ID_region }}">
+              {% if LANGUAGE_CODE == 'kk' %}
+                  {{ region.region_KZ }}
+              {% elif LANGUAGE_CODE == 'en' %}
+                  {{ region.region_EN }}
+              {% else %}
+                  {{ region.region_RU }}
+              {% endif %}
+          </option>
+      {% endfor %}
+  </select>
+
+  {% csrf_token %}
+  <table>
       <thead>
-        <tr>
-          <th>{% trans "Продукт" %}</th>
-          <th>{% trans "Единица измерения" %}</th>
-          <th>{% trans "Количество" %}</th>
-          <th>{% trans "Цена" %}</th>
-        </tr>
+          <tr>
+              <th>{% trans "ID" %}</th>
+              <th>{% trans "Продукт" %}</th>
+              <th>{% trans "Единица измерения" %}</th>
+              <th>{% trans "Количество" %}</th>
+              <th>{% trans "Цена" %}</th>
+          </tr>
       </thead>
       <tbody>
-        <!-- Пример строки таблицы -->
-        <tr>
-          <td>Продукт 1</td>
-          <td>Кг</td>
-          <td><input type="number" name="quantity_1" /></td>
-          <td><input type="number" name="price_1" /></td>
-        </tr>
-        <!-- Здесь добавьте строки для других продуктов -->
+          {% for product in products %}
+          <tr>
+              <td>{{ product.ID_product }}</td>
+              <td>
+                  {% if LANGUAGE_CODE == 'kk' %}
+                      {{ product.product_KZ }}
+                  {% elif LANGUAGE_CODE == 'en' %}
+                      {{ product.product_EN }}
+                  {% else %}
+                      {{ product.product_RU }}
+                  {% endif %}
+              </td>
+              <td>
+                  <select name="measure_{{ product.ID_product }}" id="measure_{{ product.ID_product }}">
+                      {% if product.measure_1 %}
+                      <option value="1" {% if product.measure_default == 1 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Килограмм{% elif LANGUAGE_CODE == 'en' %}Kilogram{% else %}Килограмм{% endif %}
+                      </option>
+                      {% endif %}
+                      {% if product.measure_2 %}
+                      <option value="2" {% if product.measure_default == 2 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Грамм{% elif LANGUAGE_CODE == 'en' %}Gram{% else %}Грамм{% endif %}
+                      </option>
+                      {% endif %}
+                      {% if product.measure_3 %}
+                      <option value="3" {% if product.measure_default == 3 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Штук{% elif LANGUAGE_CODE == 'en' %}Piece{% else %}Штук{% endif %}
+                      </option>
+                      {% endif %}
+                      {% if product.measure_4 %}
+                      <option value="4" {% if product.measure_default == 4 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Пучок{% elif LANGUAGE_CODE == 'en' %}Bundle{% else %}Пучок{% endif %}
+                      </option>
+                      {% endif %}
+                      {% if product.measure_5 %}
+                      <option value="5" {% if product.measure_default == 5 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Упаковка{% elif LANGUAGE_CODE == 'en' %}Pack{% else %}Упаковка{% endif %}
+                      </option>
+                      {% endif %}
+                      {% if product.measure_6 %}
+                      <option value="6" {% if product.measure_default == 6 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Булка{% elif LANGUAGE_CODE == 'en' %}Loaf{% else %}Булка{% endif %}
+                      </option>
+                      {% endif %}
+                      {% if product.measure_7 %}
+                      <option value="7" {% if product.measure_default == 7 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Литр{% elif LANGUAGE_CODE == 'en' %}Liter{% else %}Литр{% endif %}
+                      </option>
+                      {% endif %}
+                      {% if product.measure_8 %}
+                      <option value="8" {% if product.measure_default == 8 %}selected{% endif %}>
+                          {% if LANGUAGE_CODE == 'kk' %}Бутылка{% elif LANGUAGE_CODE == 'en' %}Bottle{% else %}Бутылка{% endif %}
+                      </option>
+                      {% endif %}
+                  </select>
+              </td>
+              <td><input type="number" name="quantity_{{ product.ID_product }}" step="0.01" /></td>
+              <td><input type="number" name="price_{{ product.ID_product }}" step="0.01" /></td>
+          </tr>
+          {% endfor %}
       </tbody>
-    </table>
-    
-    <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
-  </form>
+  </table>
+
+  <button type="submit" class="save-button">{% trans "Сохранить" %}</button>
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('#price-form');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const region = formData.get('region');
+            if (region === '---') {
+                alert('{% trans "Пожалуйста, выберите регион" %}');
+                return;
+            }
+
+            // Отправляем данные на сервер через Ajax
+            fetch("{% url 'price_add_list' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Переадресация на страницу благодарности
+                    window.location.href = "{% url 'thanks' %}";
+                } else {
+                    alert('{% trans "Ошибка: " %}' + data.message);
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+    });
+</script>
+
 {% endblock %}

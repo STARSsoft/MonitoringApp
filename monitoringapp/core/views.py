@@ -13,7 +13,8 @@ from .forms import UserProfileForm, CustomPasswordChangeForm  # Импортир
 from .forms import PriceForm
 from decimal import Decimal  # Импортируем Decimal для работы с числами
 from django.http import JsonResponse
-from .models import Product, Region, UnitOfMeasurement  # Добавьте Product к списку импортов
+from .models import Product, UnitOfMeasurement, Region, Price
+
 
 
 # Страница для ввода цен
@@ -205,9 +206,108 @@ def calculate_prices(quantity, price, measure, years_norm):
 
 
 
+
+# Страница для внесения цен списком
+@login_required
 def price_add_list(request):
-    # Здесь логика для добавления цен списком
-    return render(request, 'price_add_list.html')  # шаблон price_add_list.html
+    language = request.LANGUAGE_CODE  # Получаем текущий язык
+
+    if request.method == 'POST':
+        region_id = request.POST.get('region')
+        if region_id == '---':
+            return JsonResponse({'status': 'error', 'message': 'Выберите регион'})
+
+        # Получаем регион по ID
+        try:
+            region = Region.objects.get(ID_region=region_id)
+        except Region.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Регион не найден'})
+
+        # Фильтрация заполненных строк (только с ценой и количеством)
+        products_to_save = []
+        for product in Product.objects.all():
+            quantity = request.POST.get(f'quantity_{product.ID_product}')
+            price = request.POST.get(f'price_{product.ID_product}')
+            measure_id = request.POST.get(f'measure_{product.ID_product}')
+
+            if quantity and price:
+                try:
+                    quantity = Decimal(quantity)
+                    price = Decimal(price)
+                    measure = UnitOfMeasurement.objects.get(pk=measure_id)
+
+                    # Заполняем данные для сохранения
+                    products_to_save.append({
+                        'product': product,
+                        'quantity': quantity,
+                        'price': price,
+                        'measure': measure
+                    })
+                except (ValueError, UnitOfMeasurement.DoesNotExist):
+                    return JsonResponse({'status': 'error', 'message': 'Некорректные данные'})
+
+        if not products_to_save:
+            return JsonResponse({'status': 'error', 'message': 'Заполните хотя бы одну строку с ценой и количеством'})
+
+        # Сохраняем данные в базу
+        for entry in products_to_save:
+            Price.objects.create(
+                ID_product=entry['product'],
+                ID_region=region,
+                quantity=entry['quantity'],
+                ID_measure=entry['measure'],
+                price=entry['price'],
+                username=request.user,
+                date=timezone.now(),
+                years_norm=entry['product'].years_norm,
+                price_for_kg=calculate_price_for_kg(entry['price'], entry['quantity'], entry['measure'], entry['product']),
+                price_for_year=calculate_price_for_year(entry['price'], entry['quantity'], entry['product'], entry['measure']),
+                price_for_month=calculate_price_for_month(entry['price'], entry['quantity'], entry['product'], entry['measure']),
+            )
+
+        return JsonResponse({'status': 'success'})
+
+    # Отправка данных для формы
+    products = Product.objects.all()
+    regions = Region.objects.all()
+    return render(request, 'price_add_list.html', {
+        'products': products,
+        'regions': regions
+    })
+
+
+# Функции для расчета
+def calculate_price_for_kg(price, quantity, measure, product):
+    if measure.ID_unit == 1:  # Килограмм
+        return price / quantity
+    elif measure.ID_unit == 2:  # Грамм
+        return price / (quantity / Decimal(1000))
+    elif measure.ID_unit == 3:  # Штук
+        return price / quantity
+    elif measure.ID_unit == 4:  # Пучок
+        return price / (quantity * Decimal(150) / Decimal(1000))
+    elif measure.ID_unit == 5:  # Упаковка
+        return price / (product.years_norm * Decimal(1000))
+    elif measure.ID_unit == 6:  # Булка
+        return price / (quantity * Decimal(400) / Decimal(1000))
+    elif measure.ID_unit == 7:  # Литр
+        return price / quantity
+    elif measure.ID_unit == 8:  # Бутылка
+        return price / (quantity * Decimal(160) / Decimal(1000))
+    return None
+
+def calculate_price_for_year(price, quantity, product, measure):
+    price_for_kg = calculate_price_for_kg(price, quantity, measure, product)
+    return price_for_kg * product.years_norm if price_for_kg else None
+
+def calculate_price_for_month(price, quantity, product, measure):
+    price_for_year = calculate_price_for_year(price, quantity, product, measure)
+    return price_for_year / Decimal(12) if price_for_year else None
+
+# Страница благодарности
+def thanks(request):
+    return render(request, 'thanks.html')
+
 
 
 # Остальные представления
