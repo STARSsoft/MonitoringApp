@@ -394,12 +394,20 @@ def calculate_price_for_month(price, quantity, product, measure):
 
 
 # Представление для статистики
-
 def statistics(request):
     language = request.LANGUAGE_CODE  # Определяем текущий язык
 
     # Получаем все регионы для выбора
     regions = Region.objects.all()
+
+    # Определяем название региона в зависимости от текущего языка
+    for region in regions:
+        if language == 'kk':
+            region.region_name = region.region_KZ
+        elif language == 'en':
+            region.region_name = region.region_EN
+        else:
+            region.region_name = region.region_RU
 
     # По умолчанию выбран весь Казахстан
     selected_region = request.GET.get('region', '---')
