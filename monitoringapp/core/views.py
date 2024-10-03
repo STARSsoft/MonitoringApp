@@ -393,7 +393,6 @@ def calculate_price_for_month(price, quantity, product, measure):
     return price_for_year / Decimal(12)
 
 
-# Представление для статистики
 def statistics(request):
     language = request.LANGUAGE_CODE  # Определяем текущий язык
 
@@ -411,6 +410,13 @@ def statistics(request):
 
     # По умолчанию выбран весь Казахстан
     selected_region = request.GET.get('region', '---')
+
+    # Преобразуем selected_region в int, если оно не равно '---'
+    if selected_region != '---':
+        try:
+            selected_region = int(selected_region)
+        except ValueError:
+            selected_region = '---'
 
     # Текущая дата
     today = timezone.now().date()
@@ -533,6 +539,7 @@ def statistics(request):
         'regions': regions,
         'selected_region': selected_region,
     })
+
 
 
 # Остальные представления

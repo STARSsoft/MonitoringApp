@@ -1930,3 +1930,233 @@ def calculate_price_for_month(price, quantity, product, measure):
 ```
 Этот код не только помогает создать визуальную форму, но так же загружает наименования продуктов, единиц измерения и регионов на нужном языке. Так же весь функционал пересчитывает цены с учетом годовых норм потребления продуктов, рассчитывает годовые и месячные цены на продукты, и помогает загружать данные на сервер в нужном формате и виде.
 
+70. Ну и чтобы пользователи могли видеть статистику по изменению цен на продукты в определенные временные промежутки, необходимо завершить страницу со статистикой.
+Болванка шаблона данной страницы уже есть и пути к ней все прописаны. Осталось добавить в шаблон код. 'statistics.html'
+``` 
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Статистика" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Страница для вывода статистики" %}</h1>
+
+    <!-- Поле для выбора региона -->
+<form method="GET" action="{% url 'statistics' %}">
+    <label for="region">{% trans "Регион" %}:</label>
+    <select id="region" name="region">
+        <option value="---" {% if selected_region == '---' %}selected{% endif %}>{% trans "Республика Казахстан" %}</option>
+        {% for region in regions %}
+            <option value="{{ region.ID_region }}" {% if selected_region == region.ID_region %}selected{% endif %}>{{ region.region_name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">{% trans "Показать" %}</button>
+</form>
+
+
+
+    <!-- Таблица статистики -->
+    <table class="statistics">
+        <thead>
+            <tr>
+                <th rowspan="2">{% trans "Наименование продуктов" %}</th>
+                <th rowspan="2">{% trans "Цена в этом месяце" %}</th>
+                <th colspan="2">{% trans "Цена в прошлом месяце" %}</th>
+                <th colspan="2">{% trans "Цена за 3 месяца" %}</th>
+                <th colspan="2">{% trans "Цена за 6 месяцев" %}</th>
+                <th colspan="2">{% trans "Цена за 12 месяцев" %}</th>
+            </tr>
+            <tr>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+                <th>{% trans "Тенге" %}</th>
+                <th>{% trans "Изменение в %%" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in statistics_data %}
+            <tr>
+                <td>{{ data.product_name }}</td>
+                <td>{{ data.current_price|floatformat:2 }}</td>
+                <td>{{ data.price_one_month_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_one_month > 0 %}red{% else %}green{% endif %};">{{ data.change_one_month|floatformat:2 }}%</span></td>
+                <td>{{ data.price_three_months_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_three_months > 0 %}red{% else %}green{% endif %};">{{ data.change_three_months|floatformat:2 }}%</span></td>
+                <td>{{ data.price_six_months_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_six_months > 0 %}red{% else %}green{% endif %};">{{ data.change_six_months|floatformat:2 }}%</span></td>
+                <td>{{ data.price_twelve_months_ago|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_twelve_months > 0 %}red{% else %}green{% endif %};">{{ data.change_twelve_months|floatformat:2 }}%</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Примечание -->
+<form class="notice">
+    <p>{% trans "Примечание:" %}</p>
+    <ul>
+        <li>{% trans "Все цены указаны за килограмм." %}</li>
+        <li>{% trans "Цены за хлеб указаны за булку." %}</li>
+        <li>{% trans "Цены за яйца указаны за десяток." %}</li>
+    </ul>
+</form>
+{% endblock %}
+```
+
+71. HTML код сам по себе работать не будет, поэтому нужно дополнить файл 'views.py' необходимыми представлениями:
+``` 
+
+def statistics(request):
+    language = request.LANGUAGE_CODE  # Определяем текущий язык
+
+    # Получаем все регионы для выбора
+    regions = Region.objects.all()
+
+    # Определяем название региона в зависимости от текущего языка
+    for region in regions:
+        if language == 'kk':
+            region.region_name = region.region_KZ
+        elif language == 'en':
+            region.region_name = region.region_EN
+        else:
+            region.region_name = region.region_RU
+
+    # По умолчанию выбран весь Казахстан
+    selected_region = request.GET.get('region', '---')
+
+    # Преобразуем selected_region в int, если оно не равно '---'
+    if selected_region != '---':
+        try:
+            selected_region = int(selected_region)
+        except ValueError:
+            selected_region = '---'
+
+    # Текущая дата
+    today = timezone.now().date()
+    first_day_of_current_month = today.replace(day=1)
+
+    # Периоды для расчетов
+    last_month_start = first_day_of_current_month - relativedelta(months=1)
+    last_month_end = first_day_of_current_month - timedelta(days=1)
+
+    three_months_ago_start = first_day_of_current_month - relativedelta(months=3)
+    three_months_ago_end = three_months_ago_start + relativedelta(day=31)
+
+    six_months_ago_start = first_day_of_current_month - relativedelta(months=6)
+    six_months_ago_end = six_months_ago_start + relativedelta(day=31)
+
+    twelve_months_ago_start = first_day_of_current_month - relativedelta(years=1)
+    twelve_months_ago_end = twelve_months_ago_start + relativedelta(day=31)
+
+    # Подготовка списка продуктов
+    products = Product.objects.all()
+
+    # Примерное использование фильтра для региона, если выбран регион
+    if selected_region != '---':
+        region_filter = {'ID_region__ID_region': selected_region}
+    else:
+        region_filter = {}
+
+    statistics_data = []
+
+    # Цикл по каждому продукту для расчета статистики
+    for product in products:
+        # Определяем название продукта в зависимости от текущего языка
+        if language == 'kk':
+            product_name = product.product_KZ
+        elif language == 'en':
+            product_name = product.product_EN
+        else:
+            product_name = product.product_RU
+
+        # Средняя цена за текущий месяц
+        current_month_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(first_day_of_current_month, today),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        current_month_price = current_month_prices['avg_price'] or 0
+
+        # Средняя цена за прошлый месяц
+        last_month_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(last_month_start, last_month_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_last_month = last_month_prices['avg_price'] or 0
+
+        # Средняя цена за 3 месяца назад
+        three_months_ago_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(three_months_ago_start, three_months_ago_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_three_months_ago = three_months_ago_prices['avg_price'] or 0
+
+        # Средняя цена за 6 месяцев назад
+        six_months_ago_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(six_months_ago_start, six_months_ago_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_six_months_ago = six_months_ago_prices['avg_price'] or 0
+
+        # Средняя цена за 12 месяцев назад
+        twelve_months_ago_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(twelve_months_ago_start, twelve_months_ago_end),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        price_twelve_months_ago = twelve_months_ago_prices['avg_price'] or 0
+
+        # Вычисляем изменения в процентах
+        def calculate_percentage_change(current, previous):
+            if previous == 0:
+                return 0
+            return ((current - previous) / previous) * 100
+
+        change_last_month = calculate_percentage_change(current_month_price, price_last_month)
+        change_three_months = calculate_percentage_change(current_month_price, price_three_months_ago)
+        change_six_months = calculate_percentage_change(current_month_price, price_six_months_ago)
+        change_twelve_months = calculate_percentage_change(current_month_price, price_twelve_months_ago)
+
+        # Если продукт — хлеб или яйца, применяем специальные расчеты
+        if product.ID_product in [3, 4, 5]:  # Хлеб
+            current_month_price = (current_month_price / 1000) * 400
+            price_last_month = (price_last_month / 1000) * 400
+            price_three_months_ago = (price_three_months_ago / 1000) * 400
+            price_six_months_ago = (price_six_months_ago / 1000) * 400
+            price_twelve_months_ago = (price_twelve_months_ago / 1000) * 400
+        elif product.ID_product == 98:  # Яйца
+            current_month_price *= 10
+            price_last_month *= 10
+            price_three_months_ago *= 10
+            price_six_months_ago *= 10
+            price_twelve_months_ago *= 10
+
+        statistics_data.append({
+            'product_name': product_name,
+            'current_price': current_month_price,
+            'price_last_month': price_last_month,
+            'change_last_month': change_last_month,
+            'price_three_months_ago': price_three_months_ago,
+            'change_three_months': change_three_months,
+            'price_six_months_ago': price_six_months_ago,
+            'change_six_months': change_six_months,
+            'price_twelve_months_ago': price_twelve_months_ago,
+            'change_twelve_months': change_twelve_months,
+        })
+
+    return render(request, 'statistics.html', {
+        'statistics_data': statistics_data,
+        'regions': regions,
+        'selected_region': selected_region,
+    })
+
+```
+
+72. В целом, весь нужный функционал сайта реализован. Осталось произвести наполнение сайта минимальным контентом для привлекательности, заполнить информацию в шаблоне "О нас", и произвести подготовку приложения к переносу на сервер в интернете.
