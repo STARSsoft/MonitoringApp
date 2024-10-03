@@ -393,6 +393,7 @@ def calculate_price_for_month(price, quantity, product, measure):
     return price_for_year / Decimal(12)
 
 
+# Функция для получения статистических данных по ценам на продукты питания
 def statistics(request):
     language = request.LANGUAGE_CODE  # Определяем текущий язык
 
@@ -456,14 +457,6 @@ def statistics(request):
         else:
             product_name = product.product_RU
 
-        # Средняя цена за текущий месяц
-        current_month_prices = Price.objects.filter(
-            ID_product=product,
-            date__range=(first_day_of_current_month, today),
-            **region_filter
-        ).aggregate(avg_price=Avg('price_for_kg'))
-        current_month_price = current_month_prices['avg_price'] or 0
-
         # Средняя цена за прошлый месяц
         last_month_prices = Price.objects.filter(
             ID_product=product,
@@ -471,6 +464,20 @@ def statistics(request):
             **region_filter
         ).aggregate(avg_price=Avg('price_for_kg'))
         price_last_month = last_month_prices['avg_price'] or 0
+
+
+        # Средняя цена за текущий месяц
+        current_month_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(first_day_of_current_month, today),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        current_month_price = current_month_prices['avg_price']
+
+        # Если за текущий месяц нет данных, используем данные за прошлый месяц
+        if current_month_price is None:
+            current_month_price = last_month_prices['avg_price'] or 0
+
 
         # Средняя цена за 3 месяца назад
         three_months_ago_prices = Price.objects.filter(

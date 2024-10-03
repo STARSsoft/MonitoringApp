@@ -47,8 +47,8 @@
             <tr>
                 <td>{{ data.product_name }}</td>
                 <td>{{ data.current_price|floatformat:2 }}</td>
-                <td>{{ data.price_one_month_ago|floatformat:2 }}</td>
-                <td><span style="color: {% if data.change_one_month > 0 %}red{% else %}green{% endif %};">{{ data.change_one_month|floatformat:2 }}%</span></td>
+                <td>{{ data.price_last_month|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_last_month > 0 %}red{% else %}green{% endif %};">{{ data.change_last_month|floatformat:2 }}%</span></td>
                 <td>{{ data.price_three_months_ago|floatformat:2 }}</td>
                 <td><span style="color: {% if data.change_three_months > 0 %}red{% else %}green{% endif %};">{{ data.change_three_months|floatformat:2 }}%</span></td>
                 <td>{{ data.price_six_months_ago|floatformat:2 }}</td>

@@ -1982,8 +1982,8 @@ def calculate_price_for_month(price, quantity, product, measure):
             <tr>
                 <td>{{ data.product_name }}</td>
                 <td>{{ data.current_price|floatformat:2 }}</td>
-                <td>{{ data.price_one_month_ago|floatformat:2 }}</td>
-                <td><span style="color: {% if data.change_one_month > 0 %}red{% else %}green{% endif %};">{{ data.change_one_month|floatformat:2 }}%</span></td>
+                <td>{{ data.price_last_month|floatformat:2 }}</td>
+                <td><span style="color: {% if data.change_last_month > 0 %}red{% else %}green{% endif %};">{{ data.change_last_month|floatformat:2 }}%</span></td>
                 <td>{{ data.price_three_months_ago|floatformat:2 }}</td>
                 <td><span style="color: {% if data.change_three_months > 0 %}red{% else %}green{% endif %};">{{ data.change_three_months|floatformat:2 }}%</span></td>
                 <td>{{ data.price_six_months_ago|floatformat:2 }}</td>
@@ -2005,11 +2005,13 @@ def calculate_price_for_month(price, quantity, product, measure):
     </ul>
 </form>
 {% endblock %}
+
 ```
 
 71. HTML код сам по себе работать не будет, поэтому нужно дополнить файл 'views.py' необходимыми представлениями:
 ``` 
 
+# Функция для получения статистических данных по ценам на продукты питания
 def statistics(request):
     language = request.LANGUAGE_CODE  # Определяем текущий язык
 
@@ -2073,14 +2075,6 @@ def statistics(request):
         else:
             product_name = product.product_RU
 
-        # Средняя цена за текущий месяц
-        current_month_prices = Price.objects.filter(
-            ID_product=product,
-            date__range=(first_day_of_current_month, today),
-            **region_filter
-        ).aggregate(avg_price=Avg('price_for_kg'))
-        current_month_price = current_month_prices['avg_price'] or 0
-
         # Средняя цена за прошлый месяц
         last_month_prices = Price.objects.filter(
             ID_product=product,
@@ -2088,6 +2082,20 @@ def statistics(request):
             **region_filter
         ).aggregate(avg_price=Avg('price_for_kg'))
         price_last_month = last_month_prices['avg_price'] or 0
+
+
+        # Средняя цена за текущий месяц
+        current_month_prices = Price.objects.filter(
+            ID_product=product,
+            date__range=(first_day_of_current_month, today),
+            **region_filter
+        ).aggregate(avg_price=Avg('price_for_kg'))
+        current_month_price = current_month_prices['avg_price']
+
+        # Если за текущий месяц нет данных, используем данные за прошлый месяц
+        if current_month_price is None:
+            current_month_price = last_month_prices['avg_price'] or 0
+
 
         # Средняя цена за 3 месяца назад
         three_months_ago_prices = Price.objects.filter(
@@ -2156,6 +2164,7 @@ def statistics(request):
         'regions': regions,
         'selected_region': selected_region,
     })
+
 
 ```
 
