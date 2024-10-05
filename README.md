@@ -2132,7 +2132,7 @@ def statistics(request):
         change_six_months = calculate_percentage_change(current_month_price, price_six_months_ago)
         change_twelve_months = calculate_percentage_change(current_month_price, price_twelve_months_ago)
 
-        # Если продукт — хлеб или яйца, применяем специальные расчеты
+                # Если продукт — хлеб или яйца, применяем специальные расчеты
         if product.ID_product in [3, 4, 5]:  # Хлеб
             current_month_price = (current_month_price / 1000) * 400
             price_last_month = (price_last_month / 1000) * 400
@@ -2145,6 +2145,18 @@ def statistics(request):
             price_three_months_ago *= 10
             price_six_months_ago *= 10
             price_twelve_months_ago *= 10
+        elif product.ID_product == 93:  # дрожжи. Переводим цены обратно за пачку
+            current_month_price = (current_month_price * Decimal(0.16) * Decimal(1000))
+            price_last_month = (price_last_month * Decimal(0.16) * Decimal(1000))
+            price_three_months_ago = (price_three_months_ago * Decimal(0.16) * Decimal(1000))
+            price_six_months_ago = (price_six_months_ago * Decimal(0.16) * Decimal(1000))
+            price_twelve_months_ago = (price_twelve_months_ago * Decimal(0.16) * Decimal(1000))
+        elif product.ID_product in [94, 95]:  # перец, лавровый лист. Переводим цены обратно за пачку
+            current_month_price = (current_month_price * Decimal(0.04) * Decimal(1000))
+            price_last_month = (price_last_month * Decimal(0.04) * Decimal(1000))
+            price_three_months_ago = (price_three_months_ago * Decimal(0.04) * Decimal(1000))
+            price_six_months_ago = (price_six_months_ago * Decimal(0.04) * Decimal(1000))
+            price_twelve_months_ago = (price_twelve_months_ago * Decimal(0.04) * Decimal(1000))
 
         statistics_data.append({
             'product_name': product_name,

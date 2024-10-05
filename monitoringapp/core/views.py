@@ -527,6 +527,18 @@ def statistics(request):
             price_three_months_ago *= 10
             price_six_months_ago *= 10
             price_twelve_months_ago *= 10
+        elif product.ID_product == 93:  # дрожжи. Переводим цены обратно за пачку
+            current_month_price = (current_month_price * Decimal(0.16) * Decimal(1000))
+            price_last_month = (price_last_month * Decimal(0.16) * Decimal(1000))
+            price_three_months_ago = (price_three_months_ago * Decimal(0.16) * Decimal(1000))
+            price_six_months_ago = (price_six_months_ago * Decimal(0.16) * Decimal(1000))
+            price_twelve_months_ago = (price_twelve_months_ago * Decimal(0.16) * Decimal(1000))
+        elif product.ID_product in [94, 95]:  # перец, лавровый лист. Переводим цены обратно за пачку
+            current_month_price = (current_month_price * Decimal(0.04) * Decimal(1000))
+            price_last_month = (price_last_month * Decimal(0.04) * Decimal(1000))
+            price_three_months_ago = (price_three_months_ago * Decimal(0.04) * Decimal(1000))
+            price_six_months_ago = (price_six_months_ago * Decimal(0.04) * Decimal(1000))
+            price_twelve_months_ago = (price_twelve_months_ago * Decimal(0.04) * Decimal(1000))
 
         statistics_data.append({
             'product_name': product_name,
