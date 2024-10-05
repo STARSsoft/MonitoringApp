@@ -145,3 +145,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGOUT_REDIRECT_URL = 'start_page'      # настройка редиректа для выхода из профиля
 LOGIN_URL = 'login_required'  # Страница, на которую перенаправляются неавторизованные пользователи
 
+# Настройки для отправки email через SMTP-сервер
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'monitoring.osdp@gmail.com'
+EMAIL_HOST_PASSWORD = 'oouw wdds sqbk fahf'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_TIMEOUT = 10  # Увеличьте тайм-аут для ожидания ответа от SMTP-сервера
+EMAIL_DEBUG = True  # Включите отладку, чтобы увидеть сообщения об ошибках в консоли

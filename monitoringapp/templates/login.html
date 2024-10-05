@@ -23,6 +23,6 @@
         </div>
         <button type="submit" class="login-button">{% trans "Войти" %}</button>
     </form>
-
+    <p>{% trans "Забыли пароль?" %} <a href="{% url 'password_reset' %}">{% trans "Сбросить пароль" %}</a></p>
     <p>{% trans "Еще нет аккаунта?" %} <a href="{% url 'register' %}">{% trans "Зарегистрируйтесь" %}</a></p>
 {% endblock %}
