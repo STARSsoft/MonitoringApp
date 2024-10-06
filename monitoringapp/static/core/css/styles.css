@@ -424,23 +424,31 @@ table.statistics td:first-child {
 
 /* Кнопка "Показать" для выбора региона */
 form button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 8px 12px;
+    background-color: #add8e6;
+    color: black;
+    padding: 10px 50px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
 }
 
+/* Hover эффект для кнопки */
+form button:hover {
+    background-color: #3543de;
+}
+
+
+
 /* Стиль для выпадающего списка региона */
 form select {
-    padding: 8px;
+    padding: 10px 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    font-size: 14px;
+    font-size: 16px;
     margin-right: 10px;
 }
+
 
 /* Стиль для изменения цвета текста в зависимости от значений */
 table.statistics td span {
@@ -448,10 +456,6 @@ table.statistics td span {
     padding: 5px;
 }
 
-/* Hover эффект для кнопки */
-form button:hover {
-    background-color: #45a049;
-}
 
 /* Hover эффект для строк таблицы */
 table.statistics tr:hover {
@@ -474,4 +478,20 @@ table.statistics tr:hover {
 .notice ul li {
     margin-bottom: 8px;  /* Отступ между элементами списка */
     font-size: 13px;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+    table.statistics {
+        font-size: 12px; /* Уменьшаем размер шрифта на мобильных устройствах */
+    }
+
+    table.statistics th, table.statistics td {
+        padding: 5px;
+    }
+
+    .statistics td span {
+        font-size: 12px;
+    }
 }

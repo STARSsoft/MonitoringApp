@@ -7,6 +7,9 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .models import Price, Product, Region, UnitOfMeasurement
 
 
+class PasswordResetForm(forms.Form):
+    email = forms.EmailField(label=_("Адрес электронной почты:"))
+
 
 class UserRegistrationForm(forms.ModelForm):    # Форма регистрации пользователя
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)

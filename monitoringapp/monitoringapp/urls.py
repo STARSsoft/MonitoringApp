@@ -7,6 +7,9 @@ from core import views
 from django.contrib.auth import views as auth_views
 from django.conf.urls.i18n import set_language
 from django.urls import path
+from core.forms import PasswordResetForm  # Импортируем свою форму
+
+
 
 # Подключаем URL для смены языка через стандартный обработчик
 urlpatterns = [
@@ -30,7 +33,8 @@ urlpatterns += i18n_patterns(
     path('thanks/', views.thanks, name='thanks'),
     path('get-measurements/<int:product_id>/', views.get_measurements, name='get_measurements'),
     # Восстановление пароля
-    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/', auth_views.PasswordResetView.as_view(form_class=PasswordResetForm), name='password_reset'),
+  #  path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),

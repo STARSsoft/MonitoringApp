@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonitoringApp 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-27 16:43+0500\n"
+"POT-Creation-Date: 2024-10-06 14:20+0500\n"
 "PO-Revision-Date: 2024-09-24 08:55+0500\n"
 "Last-Translator: Your Name <your.email@example.com>\n"
 "Language-Team: Kazakh <kk@li.org>\n"
@@ -12,40 +12,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: monitoringapp/core/forms.py:34
+#: monitoringapp/core/forms.py:11
+msgid "Адрес электронной почты:"
+msgstr "Электрондық пошта мекенжайы"
+
+#: monitoringapp/core/forms.py:37
 msgid "Email address"
 msgstr "Электрондық пошта мекенжайы"
 
-#: monitoringapp/core/forms.py:46
+#: monitoringapp/core/forms.py:49
 msgid "Новый пароль"
 msgstr "Жана құпия сөз"
 
-#: monitoringapp/core/forms.py:53
+#: monitoringapp/core/forms.py:56
 msgid "Подтвердите новый пароль"
-msgstr "Құпия сөзді өзгерту"
+msgstr "Жаңа құпия сөзді растаңыз"
 
-#: monitoringapp/core/forms.py:64
+#: monitoringapp/core/forms.py:67
 #: monitoringapp/templates/price_add_list.html:11
 #: monitoringapp/templates/statistics.html:11
 msgid "Регион"
 msgstr "Аймақ"
 
-#: monitoringapp/core/forms.py:65
+#: monitoringapp/core/forms.py:68
 #: monitoringapp/templates/price_add_list.html:24
 msgid "Продукт"
 msgstr "Өнім"
 
-#: monitoringapp/core/forms.py:66
+#: monitoringapp/core/forms.py:69
 #: monitoringapp/templates/price_add_list.html:25
 msgid "Единица измерения"
 msgstr "Өлшем бірлігі"
 
-#: monitoringapp/core/forms.py:67
+#: monitoringapp/core/forms.py:70
 #: monitoringapp/templates/price_add_list.html:26
 msgid "Количество"
 msgstr "Саны"
 
-#: monitoringapp/core/forms.py:68
+#: monitoringapp/core/forms.py:71
 #: monitoringapp/templates/price_add_list.html:27
 msgid "Цена"
 msgstr "Бағасы"
@@ -107,6 +111,7 @@ msgstr "Шығу"
 
 #: monitoringapp/templates/base.html:42 monitoringapp/templates/login.html:24
 #: monitoringapp/templates/login_required.html:10
+#: monitoringapp/templates/registration/password_reset_complete.html:8
 msgid "Войти"
 msgstr "Кіру"
 
@@ -121,6 +126,14 @@ msgstr "Пайдаланушы аты"
 #: monitoringapp/templates/login.html:21
 msgid "Пароль"
 msgstr "Құпия сөз"
+
+#: monitoringapp/templates/login.html:26
+msgid "Забыли пароль?"
+msgstr "Құпия сөзді ұмыттыңыз ба?"
+
+#: monitoringapp/templates/login.html:26
+msgid "Сбросить пароль"
+msgstr "Құпия сөзді қалпына келтіру"
 
 #: monitoringapp/templates/login.html:27
 msgid "Еще нет аккаунта?"
@@ -218,6 +231,49 @@ msgstr "Аккаунтыңыз бар ма?"
 msgid "Войдите"
 msgstr "Кіру"
 
+#: monitoringapp/templates/registration/password_reset_complete.html:4
+msgid "Пароль изменен"
+msgstr "Құпия сөз өзгертілді"
+
+#: monitoringapp/templates/registration/password_reset_complete.html:7
+msgid "Ваш пароль был успешно изменен. Теперь вы можете войти с новым паролем."
+msgstr ""
+"Құпия сөзіңіз сәтті өзгертілді. Енді сіз жаңа құпия сөзбен кіре аласыз."
+
+#: monitoringapp/templates/registration/password_reset_confirm.html:4
+msgid "Введите новый пароль"
+msgstr "Жаңа құпия сөзді енгізіңіз"
+
+#: monitoringapp/templates/registration/password_reset_confirm.html:7
+msgid "Установите новый пароль"
+msgstr "Жаңа құпия сөзді орнатыңыз"
+
+#: monitoringapp/templates/registration/password_reset_confirm.html:11
+msgid "Установить новый пароль"
+msgstr "Жаңа құпия сөзді орнатыңыз"
+
+#: monitoringapp/templates/registration/password_reset_done.html:4
+msgid "Письмо отправлено"
+msgstr "Хат жіберілді"
+
+#: monitoringapp/templates/registration/password_reset_done.html:7
+msgid "Инструкции по сбросу пароля были отправлены на указанный email."
+msgstr ""
+"Құпия сөзді қалпына келтіру нұсқаулары көрсетілген электрондық поштаға "
+"жіберілді."
+
+#: monitoringapp/templates/registration/password_reset_form.html:4
+msgid "Восстановление пароля"
+msgstr "Құпия сөзді қалпына келтіру"
+
+#: monitoringapp/templates/registration/password_reset_form.html:8
+msgid "Введите ваш email для восстановления пароля"
+msgstr "Құпия сөзді қалпына келтіру үшін электрондық поштаны енгізіңіз"
+
+#: monitoringapp/templates/registration/password_reset_form.html:12
+msgid "Отправить"
+msgstr "Жіберу"
+
 #: monitoringapp/templates/start_page.html:7
 msgid "Мониторинг цен на продукты питания"
 msgstr "Азық-түлік бағаларын бақылау"
@@ -234,58 +290,58 @@ msgstr "Қазақстан Республикасы"
 msgid "Показать"
 msgstr "Көрсету"
 
-#: monitoringapp/templates/statistics.html:26
+#: monitoringapp/templates/statistics.html:27
 msgid "Наименование продуктов"
 msgstr "Өнім атауы"
 
-#: monitoringapp/templates/statistics.html:27
+#: monitoringapp/templates/statistics.html:28
 msgid "Цена в этом месяце"
 msgstr "Осы айдағы баға"
 
-#: monitoringapp/templates/statistics.html:28
+#: monitoringapp/templates/statistics.html:29
 msgid "Цена в прошлом месяце"
 msgstr "Өткен айдағы баға"
 
-#: monitoringapp/templates/statistics.html:29
+#: monitoringapp/templates/statistics.html:30
 msgid "Цена за 3 месяца"
 msgstr "Бағасы 3 айға"
 
-#: monitoringapp/templates/statistics.html:30
+#: monitoringapp/templates/statistics.html:31
 msgid "Цена за 6 месяцев"
 msgstr "Бағасы 6 айға"
 
-#: monitoringapp/templates/statistics.html:31
+#: monitoringapp/templates/statistics.html:32
 msgid "Цена за 12 месяцев"
 msgstr "Бағасы 12 айға"
-
-#: monitoringapp/templates/statistics.html:34
-#: monitoringapp/templates/statistics.html:36
-#: monitoringapp/templates/statistics.html:38
-#: monitoringapp/templates/statistics.html:40
-msgid "Тенге"
-msgstr "Теңге"
 
 #: monitoringapp/templates/statistics.html:35
 #: monitoringapp/templates/statistics.html:37
 #: monitoringapp/templates/statistics.html:39
 #: monitoringapp/templates/statistics.html:41
+msgid "Тенге"
+msgstr "Теңге"
+
+#: monitoringapp/templates/statistics.html:36
+#: monitoringapp/templates/statistics.html:38
+#: monitoringapp/templates/statistics.html:40
+#: monitoringapp/templates/statistics.html:42
 #, python-format
 msgid "Изменение в %%%%"
 msgstr "%%%% өзгерісі"
 
-#: monitoringapp/templates/statistics.html:64
+#: monitoringapp/templates/statistics.html:65
 msgid "Примечание:"
 msgstr "Ескерту:"
 
-#: monitoringapp/templates/statistics.html:66
+#: monitoringapp/templates/statistics.html:67
 msgid "Все цены указаны за килограмм."
 msgstr "Барлық бағалар келіге есептелген."
 
-#: monitoringapp/templates/statistics.html:67
+#: monitoringapp/templates/statistics.html:68
 msgid "Цены за хлеб указаны за булку."
 msgstr "Нан бағасы бір нанға есептелген."
 
-#: monitoringapp/templates/statistics.html:68
+#: monitoringapp/templates/statistics.html:69
 msgid "Цены за яйца указаны за десяток."
 msgstr "Жұмыртқа бағасы он дана үшін."
 
@@ -309,5 +365,3 @@ msgstr "Бағаларды қосу"
 msgid "продолжить навигацию по сайту"
 msgstr "сайтты қарауды жалғастырыңыз"
 
-#~ msgid "Страница добавления цен"
-#~ msgstr "Бағаларды қосу беті"
